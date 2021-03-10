@@ -1,12 +1,13 @@
-import Phaser from './phaser-custom-sprite-loader';
+import Phaser from 'phaser';
 import SceneStart from './scenes/SceneStart'
+import SceneMain from "./scenes/SceneMain";
 
 const config = {
     type: Phaser.AUTO,
     width: 506.25,
     height: 800,
     backgroundColor: '#2d2d2d',
-    scene: [SceneStart]
+    scene: [SceneStart, SceneMain]
 };
 
 const game = new Phaser.Game(config);
