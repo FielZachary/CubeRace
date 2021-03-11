@@ -1,13 +1,14 @@
 import Phaser from 'phaser';
 import SceneStart from './scenes/SceneStart'
 import SceneMain from "./scenes/SceneMain";
+import SceneWon from './scenes/sceneWon';
 
 const config = {
     type: Phaser.AUTO,
     width: 506.25,
     height: 800,
     backgroundColor: '#2d2d2d',
-    scene: [SceneStart, SceneMain]
+    scene: [SceneStart, SceneMain, SceneWon]
 };
 
 const game = new Phaser.Game(config);

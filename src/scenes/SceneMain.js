@@ -1,6 +1,8 @@
 import Phaser from 'phaser';
 import GameSquare from "../classes/gamesquare";
 import BlankGameSquare from "../classes/blanksquare";
+export { counter };
+export { moveCounter };
 let counter = 0;
 let moveCounter = 0;
 
@@ -15,11 +17,14 @@ export default class SceneMain extends Phaser.Scene {
         this.load.image('screenBG', 'assets/images/bg3.png')
         this.load.plugin('rexroundrectangleplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexroundrectangleplugin.min.js', true);
         this.load.plugin('rexbuttonplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexbuttonplugin.min.js', true);
+        this.load.image('doneButtonNP', 'assets/images/DoneButtonNP.png')
+        this.load.image('doneButtonOP', 'assets/images/DoneButtonOP.png')
 
 
     }
     create() {
-
+        console.log('In Scene main')
+        this.loadFont('MixolydianTitlingRg-Bold', "assets/fonts/mixolydian.ttf")
         this.bg = this.add.image(-10, 140, 'screenBG')
         this.bg.scaleX = 0.5
         this.bg.scaleY = 0.5
@@ -27,7 +32,10 @@ export default class SceneMain extends Phaser.Scene {
         this.graySquare = this.add.rexRoundRectangle(254, 530, 350, 350, 16, 0xECECEC);
         this.graySquare.alpha = 1
         this.buttonSquare = this.add.rexRoundRectangle(254, 750 , 180, 50, 16, 0x6F91C7)
-        this.doneSquareText = this.add.text(210, 730, 'Done!', {fontFamily: 'Verdana', fontStyle: 'bold', fontSize: '30px'})
+       // this.doneSquareText = this.add.text(210, 730, 'Done!', {fontFamily: 'Verdana', fontStyle: 'bold', fontSize: '30px'})
+        this.doneButton = this.add.image(254, 750, 'doneButtonNP')
+        this.doneButton.scaleX = 0.1
+        this.doneButton.scaleY = 0.1
         this.incorrectSound = this.sound.add('incorrect')
 
 
@@ -40,13 +48,13 @@ export default class SceneMain extends Phaser.Scene {
         this.transparentRec = this.add.rexRoundRectangle(73, 270, 130, 80, 16, 0xECECEC);
         this.transparentRec.alpha = 0.8
         this.blueRec = this.add.rexRoundRectangle(73, 230, 90, 30, 16, 0x6F91C7);
-        this.movesText = this.add.text(37, 217, 'Moves', {fontFamily: 'Verdana', fontStyle: 'bold', fontSize: '23px'})
-        this.movesNum = this.add.text(60, 250, moveCounter, {fontFamily: 'Verdana', fontSize: '40px', color: "#000000"})
+        this.movesText = this.add.text(39, 216, 'Moves', {fontFamily: 'Balsamiq Sans', fontSize: '23px', fontStyle: 'bold'})
+        this.movesNum = this.add.text(60, 250, moveCounter, {fontFamily: 'Balsamiq Sans', fontSize: '40px', color: "#000000"})
 
         this.transparentRec2 = this.add.rexRoundRectangle(433, 270, 130, 80, 16, 0xECECEC);
         this.transparentRec2.alpha = 0.7
         this.blueRec2 = this.add.rexRoundRectangle(433, 230, 90, 30, 16, 0x6F91C7);
-        this.timerText = this.add.text(398, 217, 'Timer', {fontFamily: 'Verdana', fontStyle: 'bold', fontSize: '23px'})
+        this.timerText = this.add.text(398, 217, 'Timer', {fontFamily: 'Balsamiq Sans', fontStyle: 'bold', fontSize: '23px'})
 
         this.gsSolution = [];
         this.gsGameBoard = [];
@@ -73,15 +81,20 @@ export default class SceneMain extends Phaser.Scene {
         });
 
 
-        this.timerNumText = this.add.text(420, 250, counter, {fontFamily: 'Verdana', color: "#000000", fontSize: '40px'})
-
+        this.timerNumText = this.add.text(420, 250, counter, {fontFamily: 'Balsamiq Sans', color: "#000000", fontSize: '40px'})
+      //  this.scene.start('SceneWon')
 
 
 
     }
-    update() {
-
-    }
+    loadFont(name, url) {
+        var newFont = new FontFace(name, `url(${url})`);
+        newFont.load().then(function (loaded) {
+            document.fonts.add(loaded);
+        }).catch(function (error) {
+            return error;
+        });
+    }   
 
 
     updateCounter() {
@@ -369,11 +382,25 @@ export default class SceneMain extends Phaser.Scene {
         }
       }
       makeButton() {
+        var button2 = this.plugins.get('rexbuttonplugin').add(this.buttonSquare, {
+            enable: true,
+            mode: 0,            // 0|'press'|1|'release'
+           // clickInterval: 100  // ms
+        });
+        button2.on('click', function (button, gameObject, pointer, event) {
+            this.doneButton.visible = false;
+            this.doneButtonClosed = this.add.image(254, 750, 'doneButtonOP')
+            this.doneButtonClosed.scaleX = 0.1;
+            this.doneButtonClosed.scaleY = 0.1;
+        }, this);
         var button = this.plugins.get('rexbuttonplugin').add(this.buttonSquare, {
             enable: true,
             mode: 1,
         });
         button.on('click', function (button, gameObject, pointer, event) {
+
+            this.doneButton.visible = true;
+            this.doneButtonClosed.destroy();
             var innerGBColors = [];
             var isSame;
             for(var i = 0; i <= 8; i++)
@@ -395,7 +422,7 @@ export default class SceneMain extends Phaser.Scene {
                 this.wrongAnimation(this.buttonSquare);
                 this.incorrectSound.play();
                 counter+=5;
-                this.penaltyText = this.add.text(420, 320, '+5', {fontFamily: 'Verdana', color: "#FF0000", fontSize: '30px'})
+                this.penaltyText = this.add.text(420, 320, '+5', {fontFamily: 'Balsamiq Sans', color: "#FF0000", fontSize: '30px'})
                 this.penaltyText.alpha = 0;
                 const tween = this.tweens.add({
                     targets: [this.penaltyText],
