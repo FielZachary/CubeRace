@@ -3,8 +3,12 @@ import GameSquare from "../classes/gamesquare";
 import BlankGameSquare from "../classes/blanksquare";
 export { counter };
 export { moveCounter };
+import {sceneWonMade} from '../scenes/sceneWon'
+
 let counter = 0;
 let moveCounter = 0;
+let hasAdjusted = 0;
+let MhasAdjusted = 0;
 
 
 export default class SceneMain extends Phaser.Scene {
@@ -23,6 +27,10 @@ export default class SceneMain extends Phaser.Scene {
 
     }
     create() {
+        hasAdjusted = 0;
+        MhasAdjusted = 0;
+        moveCounter = 0;
+        counter = 0;
         console.log('In Scene main')
         this.loadFont('MixolydianTitlingRg-Bold', "assets/fonts/mixolydian.ttf")
         this.bg = this.add.image(-10, 140, 'screenBG')
@@ -54,7 +62,7 @@ export default class SceneMain extends Phaser.Scene {
         this.transparentRec2 = this.add.rexRoundRectangle(433, 270, 130, 80, 16, 0xECECEC);
         this.transparentRec2.alpha = 0.7
         this.blueRec2 = this.add.rexRoundRectangle(433, 230, 90, 30, 16, 0x6F91C7);
-        this.timerText = this.add.text(398, 217, 'Timer', {fontFamily: 'Balsamiq Sans', fontStyle: 'bold', fontSize: '23px'})
+        this.timerText = this.add.text(402, 217, 'Timer', {fontFamily: 'Balsamiq Sans', fontStyle: 'bold', fontSize: '23px'})
 
         this.gsSolution = [];
         this.gsGameBoard = [];
@@ -68,7 +76,7 @@ export default class SceneMain extends Phaser.Scene {
         this.setGameBoard();
         counter = 0;
         this.makeButton();
-
+        this.finishedFade = true;                                                   
 
 
 
@@ -101,13 +109,27 @@ export default class SceneMain extends Phaser.Scene {
 
         counter++
         this.timerNumText.setText(counter)
-        if(counter == 10)
+        if(counter >= 10)
         {
-            this.timerNumText.x -= 15;
+ 
+            if (hasAdjusted == 0)
+            {
+                this.timerNumText.x -= 8;
+                hasAdjusted = 1;
+            }
+
+
         }
-        if(counter == 100)
+        if(counter >= 100)
         {
-            this.timerNumText.x -= 15;
+ 
+            if (hasAdjusted == 1)
+            {
+                this.timerNumText.x -= 9;
+                hasAdjusted = 2;
+            }
+
+
         }
 
     }
@@ -190,15 +212,26 @@ export default class SceneMain extends Phaser.Scene {
         this.zone.y = destinationY;
         this.bGS.switchSquare1( destinationX, destinationY );
         moveCounter++;
-        if(moveCounter == 10)
-        {
-            this.movesNum.x -= 15;
-        }
-        if(moveCounter == 100)
-        {
-            this.movesNum.x -= 15;
-        }
         this.movesNum.setText(moveCounter)
+        if(moveCounter >= 10)
+        {
+ 
+            if (MhasAdjusted == 0)
+            {
+                this.movesNum.x -= 7;
+                MhasAdjusted = 1;
+            }
+        }
+        if(moveCounter >= 100)
+        {
+ 
+            if (MhasAdjusted == 1)
+            {
+                this.movesNum.x -= 9;
+                MhasAdjusted = 2;
+            }
+        }
+
 
         for (var i=0; i<=23; i++) {
             var isAllowed = this.checkAllowed(this.gsGameBoard[i].square)
@@ -422,24 +455,29 @@ export default class SceneMain extends Phaser.Scene {
                 this.wrongAnimation(this.buttonSquare);
                 this.incorrectSound.play();
                 counter+=5;
-                this.penaltyText = this.add.text(420, 320, '+5', {fontFamily: 'Balsamiq Sans', color: "#FF0000", fontSize: '30px'})
-                this.penaltyText.alpha = 0;
-                const tween = this.tweens.add({
-                    targets: [this.penaltyText],
-                    alpha: 1,
-                    duration: 1000,
-                    repeat: 0,
-
-                  });
-                  const tween2 = this.tweens.add({
-                    targets: [this.penaltyText],
-                    scaleX: 1.5,
-                    scaleY  : 1.5,
-                    duration: 1000,
-                    repeat: 0,
-
-
-                  });
+                if (this.finishedFade == true)
+                {
+                    this.penaltyText = this.add.text(420, 320, '+5', {fontFamily: 'Balsamiq Sans', color: "#FF0000", fontSize: '30px'})
+                    this.penaltyText.alpha = 0;
+                    const tween = this.tweens.add({
+                        targets: [this.penaltyText],
+                        alpha: 1,
+                        duration: 1000,
+                        repeat: 0,
+    
+                      });
+                      const tween2 = this.tweens.add({
+                        targets: [this.penaltyText],
+                        scaleX: 1.5,
+                        scaleY  : 1.5,
+                        duration: 1000,
+                        repeat: 0,
+    
+    
+                      });
+                      this.finishedFade = false;
+                }
+    
             }
 
 
@@ -484,6 +522,7 @@ export default class SceneMain extends Phaser.Scene {
 
 
           });
+        this.finishedFade = true;
      }
 
 

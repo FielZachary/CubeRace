@@ -1,6 +1,8 @@
 import Phaser from 'phaser';
 import { counter } from '../scenes/SceneMain'
 import { moveCounter } from '../scenes/SceneMain'
+const sceneWonMade;
+export { sceneWonMade }
 export default class SceneWon extends Phaser.Scene {
     constructor() {
         super('SceneWon');
@@ -8,19 +10,24 @@ export default class SceneWon extends Phaser.Scene {
     }
     preload()
     {
+
     	this.load.image('wonBG', 'assets/images/NewWonScreen.jpg')
+        this.load.image('NextButtonOP', 'assets/images/NextButtonOP.png')
         this.load.plugin('rexroundrectangleplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexroundrectangleplugin.min.js', true);
         this.load.plugin('rexbuttonplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexbuttonplugin.min.js', true);
+        this.load.image('QuitButtonNP', 'assets/images/QuitButtonNP.png')
+        this.load.image('QuitButtonOP', 'assets/images/QuitButtonOP.png')
+
     }
     create() {
-
-        this.playButton = this.add.rexRoundRectangle(120, 740 , 220, 70, 16, 0x6F91C7)
+        this.playButton = this.add.rexRoundRectangle(130, 700 , 220, 70, 16, 0x6F91C7)
         //this.playAgainText =  this.add.text(120, 700, 'Play', {fontFamily: 'Verdana', fontStyle: 'bold', fontSize: '30px'})
         this.makePlayAgainButton(this.playButton)
+        this.quitButton = this.add.rexRoundRectangle(380, 700 , 220, 70, 16, 0xFF0000)
+        // this.quitText =  this.add.text(300, 700, 'Leave', {fontFamily: 'Verdana', fontStyle: 'bold', fontSize: '30px'})
+         this.makeLeaveButton(this.quitButton)
 
-        this.quitButton = this.add.rexRoundRectangle(370, 740 , 220, 70, 16, 0xFF0000)
-       // this.quitText =  this.add.text(300, 700, 'Leave', {fontFamily: 'Verdana', fontStyle: 'bold', fontSize: '30px'})
-        this.makeLeaveButton(this.quitButton)
+
         this.movesNumX = 435;
         this.timeNumX = 193;
         this.bg = this.add.image(0, -40, 'wonBG')
@@ -57,33 +64,69 @@ export default class SceneWon extends Phaser.Scene {
         this.movesNum = this.add.text(this.movesNumX, 575, moveCounter, {fontFamily: 'Verdana', fontStyle: 'bold', fontSize: '30px', color: "#000000"})
         console.log(counter)
        // console.log(hasSwitched)
+       this.quitButtonNP = this.add.image(370, 700, 'QuitButtonNP')
+       this.quitButtonNP.scaleX = 0.114
+       this.quitButtonNP.scaleY = 0.11
+
+       
+
 
         
     }
     update() {}
     makeLeaveButton(givenButton) {
+        var button2 = this.plugins.get('rexbuttonplugin').add(givenButton, {
+            enable: true,
+            mode: 0,            // 0|'press'|1|'release'
+            // clickInterval: 100  // ms
+        });
+        button2.on('click', function (button, gameObject, pointer, event) {
+            this.quitButtonNP.visible = false       
+            this.quitButtonOP = this.add.image(370, 700, 'QuitButtonOP')
+            this.quitButtonOP.scaleX = 0.114
+            this.quitButtonOP.scaleY = 0.11
+
+            
+        }, this);
+
+
         var button = this.plugins.get('rexbuttonplugin').add(givenButton, {
             enable: true,
             mode: 1,            // 0|'press'|1|'release'
             // clickInterval: 100  // ms
         });
         button.on('click', function (button, gameObject, pointer, event) {
-
+            this.quitButtonNP.visible = true
+            this.quitButtonOP.destroy();
             this.scene.start('SceneStart')
             
         }, this);
       }
       makePlayAgainButton(givenButton) {
+        var button2 = this.plugins.get('rexbuttonplugin').add(givenButton, {
+            enable: true,
+            mode: 0,            // 0|'press'|1|'release'
+            // clickInterval: 100  // ms
+        });
+        button2.on('click', function (button, gameObject, pointer, event) {
+            console.log('Clicked!')
+            this.playButtonOP = this.add.image(55, 790, 'NextButtonOP')
+            this.playButtonOP.scaleX = 0.114
+            this.playButtonOP.scaleY = 0.11
+        }, this);
+
+
         var button = this.plugins.get('rexbuttonplugin').add(givenButton, {
             enable: true,
             mode: 1,            // 0|'press'|1|'release'
             // clickInterval: 100  // ms
         });
         button.on('click', function (button, gameObject, pointer, event) {
-
+            this.playButtonOP.destroy();
             this.scene.start('SceneMain')
             moveCounter = 0;
             
         }, this);
       }
+      
 }
