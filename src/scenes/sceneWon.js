@@ -1,8 +1,8 @@
 import Phaser from 'phaser';
 import { counter } from '../scenes/SceneMain'
 import { moveCounter } from '../scenes/SceneMain'
-const sceneWonMade;
-export { sceneWonMade }
+// const sceneWonMade;
+// export { sceneWonMade }
 export default class SceneWon extends Phaser.Scene {
     constructor() {
         super('SceneWon');

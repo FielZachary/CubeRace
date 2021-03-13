@@ -3,7 +3,7 @@ import GameSquare from "../classes/gamesquare";
 import BlankGameSquare from "../classes/blanksquare";
 export { counter };
 export { moveCounter };
-import {sceneWonMade} from '../scenes/sceneWon'
+//import {sceneWonMade} from '../scenes/sceneWon'
 
 let counter = 0;
 let moveCounter = 0;

@@ -1,5 +1,5 @@
 WebFontConfig = {
-google: { families: ["Fresca","Flamenco","Indie Flower",'Anton', 'Montserrat', 'Verdana', 'Oxygen', 'Black Han Sans', 'Bubblegum Sans', 'Balsamiq Sans'] }
+google: { families: ['Balsamiq Sans'] }
 };
 (function() {
 var wf = document.createElement('script');
@@ -10,3 +10,6 @@ wf.async = 'true';
 var s = document.getElementsByTagName('script')[0];
 s.parentNode.insertBefore(wf, s);
 })();
+
+
+// "Fresca","Flamenco","Indie Flower",'Anton', 'Montserrat', 'Verdana', 'Oxygen', 'Black Han Sans', 'Bubblegum Sans', 
