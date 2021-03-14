@@ -5,8 +5,12 @@ import SceneWon from './scenes/sceneWon';
 
 const config = {
     type: Phaser.AUTO,
-    width: 506,
-    height: 800,
+    scale: {
+        mode: Phaser.Scale.FIT,
+        _parent: 'phaser-example',
+        width: 506,
+        height: 800,
+    },
     backgroundColor: '#2d2d2d',
     scene: [SceneStart, SceneMain, SceneWon]
 };
