@@ -7,10 +7,10 @@ export default class SceneStart extends Phaser.Scene {
     }
     preload()
     {
-    	this.load.image('mainBG', 'assets/images/StartScreen.jpg')
+    //	this.load.image('mainBG', 'assets/images/StartScreen.jpg')
        // this.load.plugin('rexroundrectangleplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexroundrectangleplugin.min.js', true);
        this.load.plugin('rexbuttonplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexbuttonplugin.min.js', true);
-       this.load.image('PlayButtonOP', 'assets/images/PlayNGButtonOP.png')
+     //  this.load.image('PlayButtonOP', 'assets/images/PlayNGButtonOP.png')
     }
     
     create() {
