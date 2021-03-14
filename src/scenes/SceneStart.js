@@ -7,7 +7,7 @@ export default class SceneStart extends Phaser.Scene {
     }
     preload()
     {
-    	this.load.image('mainBG', 'assets/images/StartScreen.jpg')
+    	this.load.image('mainBG', 'assets/images/bg3.png')
        // this.load.plugin('rexroundrectangleplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexroundrectangleplugin.min.js', true);
        this.load.plugin('rexbuttonplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexbuttonplugin.min.js', true);
      //  this.load.image('PlayButtonOP', 'assets/images/PlayNGButtonOP.png')
@@ -45,8 +45,6 @@ export default class SceneStart extends Phaser.Scene {
         this.mainBG.scaleX = 0.05
         this.mainBG.scaleY = 0.05
         this.mainBG.setOrigin(0, 0)
-        this.mainBG.realWidth = 3185
-        this.mainBG.realHeight = 4096
         console.log(this.mainBG);
         // this.playButtonOP = this.add.image(198, 550, 'PlayButtonOP')
         // this.playButtonOP.scaleX = 0.15
