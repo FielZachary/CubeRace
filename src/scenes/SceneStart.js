@@ -42,10 +42,10 @@ export default class SceneStart extends Phaser.Scene {
         this.buttonSquare.setOrigin(0.5, 0.5)
         
         this.mainBG = this.add.image(0, 0, 'mainBG')
-        this.mainBG.scaleX = 0.11375
-        this.mainBG.scaleY = 0.11375
+        this.mainBG.scaleX = 0.05
+        this.mainBG.scaleY = 0.05
         this.mainBG.setOrigin(0, 0)
-        console.log("Ready!!!!!");
+        console.log(this.mainBG);
         // this.playButtonOP = this.add.image(198, 550, 'PlayButtonOP')
         // this.playButtonOP.scaleX = 0.15
         // this.playButtonOP.scaleY = 0.15
