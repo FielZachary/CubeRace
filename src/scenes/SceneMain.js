@@ -18,7 +18,7 @@ export default class SceneMain extends Phaser.Scene {
     preload()
     {
         this.load.audio('incorrect', 'assets/Sound/wrongSFX.mp3')
-        this.load.image('screenBG', 'assets/images/bg3.png')
+        this.load.image('screenBG', 'assets/images/bg4.png')
         this.load.plugin('rexroundrectangleplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexroundrectangleplugin.min.js', true);
         this.load.plugin('rexbuttonplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexbuttonplugin.min.js', true);
         this.load.image('doneButtonNP', 'assets/images/DoneButtonNP.png')

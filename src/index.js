@@ -6,7 +6,7 @@ import SceneWon from './scenes/sceneWon';
 const config = {
     type: Phaser.AUTO,
     scale: {
-        mode: Phaser.Scale.ENVELOP,
+        mode: Phaser.Scale.FIT,
         _parent: 'phaser-example',
         width: 506,
         height: 800,
