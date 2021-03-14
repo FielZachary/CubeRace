@@ -25,7 +25,7 @@ if (isMobile == -1) {
     var config = {
         type: Phaser.AUTO,
         scale: {
-            mode: Phaser.Scale.FIT,
+            mode: Phaser.Scale.ENVELOP,
             _parent: 'phaser-example',
             width: 506,
             height: 800,
