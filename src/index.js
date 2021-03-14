@@ -5,8 +5,8 @@ import SceneWon from './scenes/sceneWon';
 
 const config = {
     type: Phaser.AUTO,
-    width: 506,
-    height: 800,
+    width: 1006,
+    height: 1591,
     backgroundColor: '#2d2d2d',
     scene: [SceneStart, SceneMain, SceneWon]
 };
