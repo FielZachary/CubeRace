@@ -27,8 +27,8 @@ if (isMobile == -1) {
         scale: {
             mode: Phaser.Scale.ENVELOP,
             _parent: 'phaser-example',
-            width: window.innerWidth,
-            height: window.innerHeight,
+            width: 506,
+            height: 800,
         },
         backgroundColor: '#2d2d2d',
         scene: [SceneStart, SceneMain, SceneWon]
