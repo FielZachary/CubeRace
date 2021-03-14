@@ -3,17 +3,37 @@ import SceneStart from './scenes/SceneStart'
 import SceneMain from "./scenes/SceneMain";
 import SceneWon from './scenes/sceneWon';
 
-const config = {
-    type: Phaser.AUTO,
-    scale: {
-        mode: Phaser.Scale.FIT,
-        _parent: 'phaser-example',
-        width: 506,
-        height: 800,
-    },
-    backgroundColor: '#2d2d2d',
-    scene: [SceneStart, SceneMain, SceneWon]
-};
+
+var isMobile = navigator.userAgent.indexOf("Mobile");
+
+if (isMobile == -1) {
+    isMobile = navigator.userAgent.indexOf("Tablet");
+}
+if (isMobile == -1) {
+    var config = {
+        type: Phaser.AUTO,
+        scale: {
+            mode: Phaser.Scale.ENVELOP,
+            _parent: 'phaser-example',
+            width: 506,
+            height: 800,
+        },
+        backgroundColor: '#2d2d2d',
+        scene: [SceneStart, SceneMain, SceneWon]
+    };
+} else {
+    var config = {
+        type: Phaser.AUTO,
+        scale: {
+            mode: Phaser.Scale.FIT,
+            _parent: 'phaser-example',
+            width: 506,
+            height: 800,
+        },
+        backgroundColor: '#2d2d2d',
+        scene: [SceneStart, SceneMain, SceneWon]
+    };
+}
 
 const game = new Phaser.Game(config);
 
