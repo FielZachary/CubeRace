@@ -11,7 +11,7 @@ export default class SceneWon extends Phaser.Scene {
     preload()
     {
 
-    	this.load.image('wonBG', 'assets/images/NewWonScreen.jpg')
+    	this.load.image('wonBG', 'assets/images/NewWonScreen.png')
         this.load.image('NextButtonOP', 'assets/images/NextButtonOP.png')
         this.load.plugin('rexroundrectangleplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexroundrectangleplugin.min.js', true);
         this.load.plugin('rexbuttonplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexbuttonplugin.min.js', true);
@@ -31,8 +31,8 @@ export default class SceneWon extends Phaser.Scene {
         this.movesNumX = 435;
         this.timeNumX = 193;
         this.bg = this.add.image(0, -40, 'wonBG')
-        this.bg.scaleX = 0.11375
-        this.bg.scaleY = 0.11375
+        this.bg.scaleX = 0.47
+        this.bg.scaleY = 0.47
         this.bg.setOrigin(0, 0)
         console.log('asdpofihsadopifh')
         // this.wonChar = this.add.image(247, 290, 'wonChar')
@@ -64,7 +64,7 @@ export default class SceneWon extends Phaser.Scene {
         this.movesNum = this.add.text(this.movesNumX, 575, moveCounter, {fontFamily: 'Verdana', fontStyle: 'bold', fontSize: '30px', color: "#000000"})
         console.log(counter)
        // console.log(hasSwitched)
-       this.quitButtonNP = this.add.image(370, 700, 'QuitButtonNP')
+       this.quitButtonNP = this.add.image(370, 692, 'QuitButtonNP')
        this.quitButtonNP.scaleX = 0.114
        this.quitButtonNP.scaleY = 0.11
 
@@ -82,7 +82,7 @@ export default class SceneWon extends Phaser.Scene {
         });
         button2.on('click', function (button, gameObject, pointer, event) {
             this.quitButtonNP.visible = false       
-            this.quitButtonOP = this.add.image(370, 700, 'QuitButtonOP')
+            this.quitButtonOP = this.add.image(370, 692, 'QuitButtonOP')
             this.quitButtonOP.scaleX = 0.114
             this.quitButtonOP.scaleY = 0.11
 
@@ -110,7 +110,7 @@ export default class SceneWon extends Phaser.Scene {
         });
         button2.on('click', function (button, gameObject, pointer, event) {
             console.log('Clicked!')
-            this.playButtonOP = this.add.image(55, 790, 'NextButtonOP')
+            this.playButtonOP = this.add.image(55, 782, 'NextButtonOP')
             this.playButtonOP.scaleX = 0.114
             this.playButtonOP.scaleY = 0.11
         }, this);
