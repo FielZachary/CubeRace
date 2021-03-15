@@ -17,6 +17,7 @@ if (isMobile == -1) {
             _parent: 'phaser-example',
             width: 506,
             height: 800,
+            autoCenter: true,
         },
         backgroundColor: '#2d2d2d',
         scene: [SceneStart, SceneMain, SceneWon]

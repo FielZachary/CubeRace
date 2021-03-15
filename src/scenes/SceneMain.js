@@ -19,6 +19,7 @@ export default class SceneMain extends Phaser.Scene {
     {
         this.load.audio('incorrect', 'assets/Sound/wrongSFX.mp3')
         this.load.image('screenBG', 'assets/images/bg4.png')
+        this.load.image('ExitButton', 'assets/images/ExitButton.png')
         this.load.plugin('rexroundrectangleplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexroundrectangleplugin.min.js', true);
         this.load.plugin('rexbuttonplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexbuttonplugin.min.js', true);
         this.load.image('doneButtonNP', 'assets/images/DoneButtonNP.png')
@@ -76,7 +77,19 @@ export default class SceneMain extends Phaser.Scene {
         this.setGameBoard();
         counter = 0;
         this.makeButton();
-        this.finishedFade = true;                                                   
+        this.finishedFade = true;   
+        this.exitButton = this.add.rectangle(40, 40, 20, 20)      
+        this.exitButtonImg = this.add.image(40, 40, 'ExitButton')
+        this.exitButtonImg.scaleX = 0.5            
+        this.exitButtonImg.scaleY = 0.5       
+        var eButton = this.plugins.get('rexbuttonplugin').add(this.exitButtonImg, {
+             enable: true,
+             mode: 0,            // 0|'press'|1|'release'
+            // clickInterval: 100  // ms
+        });       
+        eButton.on('click', function (button, gameObject, pointer, event) {
+            this.scene.start('SceneStart')
+        }, this);     
 
 
 
