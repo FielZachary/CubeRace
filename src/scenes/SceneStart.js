@@ -11,6 +11,7 @@ export default class SceneStart extends Phaser.Scene {
        // this.load.plugin('rexroundrectangleplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexroundrectangleplugin.min.js', true);
        this.load.plugin('rexbuttonplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexbuttonplugin.min.js', true);
        this.load.image('PlayButtonOP', 'assets/images/PlayNGButtonOP.png')
+       this.load.audio('BGMusic', 'assets/Sound/CubeRaceBGMusic.mp3')
     }
     
     create() {
@@ -45,6 +46,8 @@ export default class SceneStart extends Phaser.Scene {
         this.mainBG.scaleX = 0.47
         this.mainBG.scaleY = 0.47
         this.mainBG.setOrigin(0, 0)
+
+        this.playMusic();
         console.log(this.mainBG);
         // this.playButtonOP = this.add.image(198, 550, 'PlayButtonOP')
         // this.playButtonOP.scaleX = 0.15
@@ -53,4 +56,9 @@ export default class SceneStart extends Phaser.Scene {
 
     }
     update() {}
+    playMusic() {
+        this.bgMusic = this.sound.add('BGMusic')
+        this.bgMusic.play();
+        this.bgMusic.loop = true;
+    }
 }

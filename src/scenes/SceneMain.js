@@ -24,6 +24,7 @@ export default class SceneMain extends Phaser.Scene {
         this.load.plugin('rexbuttonplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexbuttonplugin.min.js', true);
         this.load.image('doneButtonNP', 'assets/images/DoneButtonNP.png')
         this.load.image('doneButtonOP', 'assets/images/DoneButtonOP.png')
+        this.load.audio('MovePiece', 'assets/Sound/MovePieceSFX.mp3')
 
 
     }
@@ -33,6 +34,7 @@ export default class SceneMain extends Phaser.Scene {
         moveCounter = 0;
         counter = 0;
         console.log('In Scene main')
+        this.pieceMoveSound = this.sound.add('MovePiece')
         this.loadFont('MixolydianTitlingRg-Bold', "assets/fonts/mixolydian.ttf")
         this.bg = this.add.image(-10, 140, 'screenBG')
         this.bg.scaleX = 0.5
@@ -226,6 +228,7 @@ export default class SceneMain extends Phaser.Scene {
         this.bGS.switchSquare1( destinationX, destinationY );
         moveCounter++;
         this.movesNum.setText(moveCounter)
+        this.pieceMoveSound.play();
         if(moveCounter >= 10)
         {
  
