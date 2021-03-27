@@ -25,6 +25,11 @@ export default class SceneMain extends Phaser.Scene {
         this.load.image('doneButtonNP', 'assets/images/DoneButtonNP.png')
         this.load.image('doneButtonOP', 'assets/images/DoneButtonOP.png')
         this.load.audio('MovePiece', 'assets/Sound/MovePieceSFX.mp3')
+        this.load.scenePlugin({
+            key: 'rexuiplugin',
+            url: 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js',
+            sceneKey: 'rexUI'
+        });     
 
 
     }
@@ -447,7 +452,7 @@ export default class SceneMain extends Phaser.Scene {
             mode: 1,
         });
         button.on('click', function (button, gameObject, pointer, event) {
-
+            console.log('asdf')
             this.doneButton.visible = true;
             this.doneButtonClosed.destroy();
             var innerGBColors = [];
@@ -459,10 +464,28 @@ export default class SceneMain extends Phaser.Scene {
             this.gb3x3Colors();
 
             isSame = this.checkArrays(this.innerGBColors, this.solutionColors);
+            
 
             if (isSame == true)
             {
-                this.scene.start('SceneWon')
+                var value = localStorage.getItem('username');
+                if (value == null)
+                {
+                    var loginDialog = CreateLoginDialog(this, {
+                        x: 250,
+                        y: 400,
+                        title: 'Sign up to submit your time',
+                        username: 'Enter desired username',
+                        password: '123',
+                    })
+                        .on('login', function (username, password) {
+                            print.text += `${username}:${password}\n`;
+                            loginDialog.destroy();
+                        })
+                        //.drawBounds(this.add.graphics(), 0xff0000)
+                        .popUp(500);
+                }
+                //this.scene.start('SceneWon')
 
             }
             if (isSame == false)
@@ -529,7 +552,7 @@ export default class SceneMain extends Phaser.Scene {
 
      }
      fadeOutText() {
-         console.log('hi')
+         //console.log('hi')
         const tween3 = this.tweens.add({
             targets: [this.penaltyText],
             alpha: 0,
@@ -543,3 +566,63 @@ export default class SceneMain extends Phaser.Scene {
 
 
 }
+const COLOR_PRIMARY = 0xFFFFFF  ;
+const COLOR_LIGHT = 0x7b5e57;
+const COLOR_DARK = 0x260e04;
+
+const GetValue = Phaser.Utils.Objects.GetValue;
+var CreateLoginDialog = function (scene, config, onSubmit) {
+    var username = GetValue(config, 'username', 'Username');
+    var password = GetValue(config, 'password', '');
+    var title = GetValue(config, 'title', 'Welcome');
+    var x = GetValue(config, 'x', 0);
+    var y = GetValue(config, 'y', 0);
+    var width = GetValue(config, 'width', undefined);
+    var height = GetValue(config, 'height', undefined);
+
+    var background = scene.rexUI.add.roundRectangle(0, 0, 10, 10, 10, COLOR_PRIMARY);
+    var titleField = scene.add.text(0, 0, title, {fontSize: '30px', color: '#000000', fontFamily: 'Balsamiq Sans' });
+    var userNameField = scene.rexUI.add.label({
+        orientation: 'x',
+        background: scene.rexUI.add.roundRectangle(0, 0, 10, 10, 10).setStrokeStyle(1, 0xC6CEBC),
+        //icon: scene.add.image(0, 0, 'user'),
+        text: scene.rexUI.add.BBCodeText(0, 0, username, { fixedWidth: 250, fixedHeight: 36, valign: 'center', color: '#000000', fontFamily: 'Balsamiq Sans' }),
+        space: { top: 5, bottom: 5, left: 15, right: 15, }
+    })
+        .setInteractive()
+        .on('pointerdown', function () {
+            var config = {
+                onTextChanged: function(textObject, text) {
+                    username = text;
+                    textObject.text = text;
+                }
+            }
+            scene.rexUI.edit(userNameField.getElement('text'), config);
+        });
+
+    var loginButton = scene.rexUI.add.label({
+        orientation: 'x',
+        background: scene.rexUI.add.roundRectangle(0, 0, 20, 15, 10, 0xC6CEBC),
+        text: scene.add.text(0, 0, 'Sign Up', {fontFamily: 'Balsamiq Sans', fontSize: '23px', fontStyle: 'bold'}),
+        space: { top: 8, bottom: 8, left: 16, right: 16 }
+    })
+        .setInteractive()
+        .on('pointerdown', function () {
+            //loginDialog.emit('login', username);
+            console.log(username)
+        });
+
+    var loginDialog = scene.rexUI.add.sizer({
+        orientation: 'y',
+        x: x,
+        y: y,
+        width: width,
+        height: height,
+    })
+        .addBackground(background)
+        .add(titleField, 0, 'center', { top: 30, bottom: 30, left: 30, right: 30 }, false)
+        .add(userNameField, 0, 'left', { bottom: 40, left: 75, right: 75 }, true)
+        .add(loginButton, 0, 'center', { bottom: 30, left: 30, right: 30 }, false)
+        .layout();
+    return loginDialog;
+};

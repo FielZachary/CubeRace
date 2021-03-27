@@ -15,6 +15,7 @@ export default class SceneStart extends Phaser.Scene {
     }
     
     create() {
+        //console.log('asdl;')
         this.buttonSquare = this.add.rectangle(195, 542.5, 330, 80, 0x000000)
 
         var button2 = this.plugins.get('rexbuttonplugin').add(this.buttonSquare, {
@@ -48,12 +49,13 @@ export default class SceneStart extends Phaser.Scene {
         this.mainBG.setOrigin(0, 0)
 
         this.playMusic();
-        console.log(this.mainBG);
+        //console.log(this.mainBG);
         // this.playButtonOP = this.add.image(198, 550, 'PlayButtonOP')
         // this.playButtonOP.scaleX = 0.15
         // this.playButtonOP.scaleY = 0.15
         //this.scene.start('SceneWon')
-
+       // this.scene.start('SceneSignUp')
+        //console.log('end')
     }
     update() {}
     playMusic() {
@@ -62,3 +64,12 @@ export default class SceneStart extends Phaser.Scene {
         this.bgMusic.loop = true;
     }
 }
+
+
+// //localStorage.setItem('name', 'zac');
+// var value = localStorage.getItem('name');
+// if (value == null) {
+//     gotologin
+// } else {
+//     gotoscore
+// }

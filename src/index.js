@@ -2,6 +2,10 @@ import Phaser from 'phaser';
 import SceneStart from './scenes/SceneStart'
 import SceneMain from "./scenes/SceneMain";
 import SceneWon from './scenes/sceneWon';
+import SceneLeaderboard from './scenes/SceneLeaderboard.js'
+import SceneSignUp from './scenes/SceneSignUp'
+import InputTextPlugin from 'phaser3-rex-plugins/plugins/inputtext-plugin.js';
+import RexUIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin'
 
 
 var isMobile = navigator.userAgent.indexOf("Mobile");
@@ -20,7 +24,10 @@ if (isMobile == -1) {
             autoCenter: true,
         },
         backgroundColor: '#2d2d2d',
-        scene: [SceneStart, SceneMain, SceneWon]
+        dom: {
+            createContainer: true
+        },
+        scene: [SceneStart, SceneMain, SceneWon, SceneLeaderboard]
     };
 } else {
     var config = {
@@ -36,23 +43,7 @@ if (isMobile == -1) {
     };
 }
 
+
+
 const game = new Phaser.Game(config);
 
-function preload ()
-{
-    this.load.image('logo', 'assets/logo.png');
-}
-
-function create ()
-{
-    const logo = this.add.image(400, 150, 'logo');
-
-    this.tweens.add({
-        targets: logo,
-        y: 450,
-        duration: 2000,
-        ease: 'Power2',
-        yoyo: true,
-        loop: -1
-    });
-}

@@ -19,13 +19,17 @@
   },
   "homepage": "https://github.com/photonstorm/phaser3-project-template-custom-build#readme",
   "dependencies": {
+    "firebase": "^8.3.1",
     "phaser": "^3.53.1",
-    "phaser3-rex-plugins": "^1.1.41"
+    "phaser3-rex-plugins": "^1.1.42",
+    "regenerator-runtime": "^0.13.7"
   },
   "devDependencies": {
     "@babel/core": "^7.7.4",
     "@babel/preset-env": "^7.7.4",
+    "@expo/webpack-config": "^0.12.63",
     "babel-loader": "^8.0.6",
+    "babel-preset-env": "^1.7.0",
     "clean-webpack-plugin": "^3.0.0",
     "copy-webpack-plugin": "^5.0.5",
     "file-loader": "^5.0.2",
