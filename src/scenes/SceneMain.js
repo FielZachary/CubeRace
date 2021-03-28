@@ -442,11 +442,8 @@ export default class SceneMain extends Phaser.Scene {
             return otherPossibility3;
         }
       }
+
       async makeButton() {
-        var userUsername = localStorage.getItem('username')
-        var UserTopScore = await leaderBoard.getScore(`${userUsername}`)
-        console.log(userUsername)
-        console.log(leaderBoard)
         var button2 = this.plugins.get('rexbuttonplugin').add(this.buttonSquare, {
             enable: true,
             mode: 0,            // 0|'press'|1|'release'
@@ -480,42 +477,8 @@ export default class SceneMain extends Phaser.Scene {
 
             if (isSame == true)
             {
-                var value = localStorage.getItem('username');
-                if (value == null)
-                {
 
-                    var loginDialog = CreateLoginDialog(this, {
-                        x: 250,
-                        y: 400,
-                        title: 'Sign up to submit your time',
-                        username: 'Enter desired username',
-                        password: '123',
-                    })
-                        .on('login', async function (username, password) {
-                            localStorage.setItem('username', `${username}`)
-                            //print.text += `${username}:${password}\n`;
-                            var ifExists = await leaderBoard.getScore(`${username}`)
-                            if (ifExists == undefined)
-                            {
-                                this.timer.paused = true;
-                                leaderBoard.setUser(`${username}`).post(counter * -1, { moves: `${moveCounter}` });
-                                loginDialog.destroy();
-                                this.scene.start('SceneWon')
-                            } 
-                        })
-                        //.drawBounds(this.add.graphics(), 0xff0000)
-                        .popUp(500);
-        
-                    var username = 'Username'
-                } else {
-                    var UserTopTime = UserTopScore.score
-                    if (counter < UserTopTime * -1)
-                    {
-                        leaderBoard.setUser(`${userUsername}`).post(counter * -1, { moves: `${moveCounter}` });
-                    }
-                    this.scene.start('SceneWon')
-                }
-                //this.scene.start('SceneWon')
+                this.scene.start('SceneWon')
 
             }
             if (isSame == false)
