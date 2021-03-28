@@ -4,6 +4,8 @@ import BlankGameSquare from "../classes/blanksquare";
 export { counter };
 export { moveCounter };
 import { leaderBoard } from "../scenes/SceneStart"
+import { calledBack } from "../scenes/SceneStart"
+console.log('In scene main ' + calledBack)
 //import {sceneWonMade} from '../scenes/sceneWon'
 
 let counter = 0;
@@ -99,6 +101,7 @@ export default class SceneMain extends Phaser.Scene {
             // clickInterval: 100  // ms
         });       
         eButton.on('click', function (button, gameObject, pointer, event) {
+          //  calledBack = true;
             this.scene.start('SceneStart')
         }, this);     
 

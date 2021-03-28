@@ -118,11 +118,11 @@ export default class SceneLeaderboard extends Phaser.Scene
 
 
 		this.firstUserName = this.add.text(80, 135, `${topUser.userID}`, {fontFamily: 'Balsamiq Sans', fontSize: '35px', fontStyle: 'bold', color: "#000000"})
-		this.firstUserTime = this.add.text(300, 130, `time: ${topUser.score* -1} secs`, {fontFamily: 'Balsamiq Sans', fontSize: '23px', fontStyle: 'bold', color: "#A1A3A6"})
+		this.firstUserTime = this.add.text(300, 130, `time: ${topUser.score * -1} secs`, {fontFamily: 'Balsamiq Sans', fontSize: '23px', fontStyle: 'bold', color: "#A1A3A6"})
 		this.firstUserMoves = this.add.text(300, 155, `moves: ${topUser.moves}`, {fontFamily: 'Balsamiq Sans', fontSize: '23px', fontStyle: 'bold', color: "#A1A3A6"})
 
 		this.secondUserName = this.add.text(80, 285, `${topTwoUser.userID}`, {fontFamily: 'Balsamiq Sans', fontSize: '35px', fontStyle: 'bold', color: "#000000"})
-		this.secondUserTime = this.add.text(300, 280, `time: ${topTwoUser.score* -1} secs`, {fontFamily: 'Balsamiq Sans', fontSize: '23px', fontStyle: 'bold', color: "#A1A3A6"})
+		this.secondUserTime = this.add.text(300, 280, `time: ${topTwoUser.score * -1} secs`, {fontFamily: 'Balsamiq Sans', fontSize: '23px', fontStyle: 'bold', color: "#A1A3A6"})
 		this.secondUserMoves = this.add.text(300, 305, `moves: ${topTwoUser.moves}`, {fontFamily: 'Balsamiq Sans', fontSize: '23px', fontStyle: 'bold', color: "#A1A3A6"})
 
 		this.thirdUserName = this.add.text(80, 445, `${topThreeUser.userID}`, {fontFamily: 'Balsamiq Sans', fontSize: '35px', fontStyle: 'bold', color: "#000000"})

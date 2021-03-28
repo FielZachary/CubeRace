@@ -2,6 +2,15 @@ import Phaser from 'phaser';
 export { leaderBoard }
 var leaderBoard;
 
+if ( calledBack == undefined) {
+    var calledOnce = false;
+}
+
+console.log('In scene start ' + calledBack)
+var calledBack = false;
+export { calledBack }
+
+
 
 export default class SceneStart extends Phaser.Scene {
     constructor() {
@@ -77,7 +86,7 @@ export default class SceneStart extends Phaser.Scene {
             // clickInterval: 100  // ms
         });
         button3.on('click', function (button, gameObject, pointer, event) {
-            this.scene.start('SceneLeaderBoard')
+            this.scene.start('SceneLeaderboard')
         }, this )
 
 
@@ -87,7 +96,13 @@ export default class SceneStart extends Phaser.Scene {
         this.mainBG.scaleY = 0.47
         this.mainBG.setOrigin(0, 0)
 
-        this.playMusic();
+        if (calledOnce == false)
+        {
+            console.log('playing music')
+            this.playMusic();
+            calledOnce = true;
+        }
+
         //console.log(this.mainBG);
         // this.playButtonOP = this.add.image(198, 550, 'PlayButtonOP')
         // this.playButtonOP.scaleX = 0.15
