@@ -100,10 +100,10 @@ export default class GameSquare extends Phaser.GameObjects.Container
     onSwitch()
     {
 
-        if (this.dragObj.x <= this.scene.zone.x+25 && this.dragObj.x >= this.scene.zone.x-25)
+        if (this.dragObj.x <= this.scene.zone.x+40 && this.dragObj.x >= this.scene.zone.x-40)
         {
 
-            if (this.dragObj.y <= this.scene.zone.y+25 && this.dragObj.y >= this.scene.zone.y-25 )
+            if (this.dragObj.y <= this.scene.zone.y+40 && this.dragObj.y >= this.scene.zone.y-40 )
             {
 
 
