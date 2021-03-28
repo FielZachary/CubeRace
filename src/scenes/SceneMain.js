@@ -440,6 +440,9 @@ export default class SceneMain extends Phaser.Scene {
         }
       }
       async makeButton() {
+        var userUsername = localStorage.getItem('username')
+        var UserTopScore = await leaderBoard.getScore(`${userUsername}`)
+        console.log(userUsername)
         console.log(leaderBoard)
         var button2 = this.plugins.get('rexbuttonplugin').add(this.buttonSquare, {
             enable: true,
@@ -491,8 +494,10 @@ export default class SceneMain extends Phaser.Scene {
                             var ifExists = await leaderBoard.getScore(`${username}`)
                             if (ifExists == undefined)
                             {
+                                this.timer.paused = true;
                                 leaderBoard.setUser(`${username}`).post(counter * -1, { moves: `${moveCounter}` });
                                 loginDialog.destroy();
+                                this.scene.start('SceneWon')
                             } 
                         })
                         //.drawBounds(this.add.graphics(), 0xff0000)
@@ -500,6 +505,11 @@ export default class SceneMain extends Phaser.Scene {
         
                     var username = 'Username'
                 } else {
+                    var UserTopTime = UserTopScore.score
+                    if (counter < UserTopTime * -1)
+                    {
+                        leaderBoard.setUser(`${userUsername}`).post(counter * -1, { moves: `${moveCounter}` });
+                    }
                     this.scene.start('SceneWon')
                 }
                 //this.scene.start('SceneWon')

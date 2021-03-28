@@ -34,14 +34,20 @@ if (isMobile == -1) {
 } else {
     var config = {
         type: Phaser.AUTO,
+        parent: 'phaser-example',
         scale: {
             mode: Phaser.Scale.FIT,
+            autoCenter: Phaser.Scale.CENTER_BOTH,
             _parent: 'phaser-example',
             width: 506,
             height: 800,
+          //  autoCenter: true,
         },
         backgroundColor: '#2d2d2d',
-        scene: [SceneStart, SceneMain, SceneWon]
+        dom: {
+            createContainer: true
+        },
+        scene: [SceneStart, SceneMain, SceneWon, SceneLeaderboard]
     };
 }
 
