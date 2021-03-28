@@ -4,6 +4,14 @@ import { moveCounter } from '../scenes/SceneMain'
 import { leaderBoard } from "../scenes/SceneStart"
 // const sceneWonMade;
 // export { sceneWonMade }
+
+
+
+const COLOR_PRIMARY = 0xFFFFFF  ;
+const COLOR_LIGHT = 0x7b5e57;
+const COLOR_DARK = 0x260e04;
+
+
 export default class SceneWon extends Phaser.Scene {
     constructor() {
         super('SceneWon');
