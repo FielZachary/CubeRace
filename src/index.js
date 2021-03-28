@@ -16,12 +16,14 @@ if (isMobile == -1) {
 if (isMobile == -1) {
     var config = {
         type: Phaser.AUTO,
+        parent: 'phaser-example',
         scale: {
             mode: Phaser.Scale.FIT,
+            autoCenter: Phaser.Scale.CENTER_BOTH,
             _parent: 'phaser-example',
             width: 506,
             height: 800,
-            autoCenter: true,
+          //  autoCenter: true,
         },
         backgroundColor: '#2d2d2d',
         dom: {

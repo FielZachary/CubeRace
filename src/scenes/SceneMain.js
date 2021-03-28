@@ -3,17 +3,21 @@ import GameSquare from "../classes/gamesquare";
 import BlankGameSquare from "../classes/blanksquare";
 export { counter };
 export { moveCounter };
+import { leaderBoard } from "../scenes/SceneStart"
 //import {sceneWonMade} from '../scenes/sceneWon'
 
 let counter = 0;
 let moveCounter = 0;
 let hasAdjusted = 0;
 let MhasAdjusted = 0;
+const COLOR_PRIMARY = 0xFFFFFF  ;
+const COLOR_LIGHT = 0x7b5e57;
+const COLOR_DARK = 0x260e04;
 
 
 export default class SceneMain extends Phaser.Scene {
     constructor() {
-        super('SceneMain');
+        super('SceneMain', {key: 'examples'});
     }
     preload()
     {
@@ -435,7 +439,8 @@ export default class SceneMain extends Phaser.Scene {
             return otherPossibility3;
         }
       }
-      makeButton() {
+      async makeButton() {
+        console.log(leaderBoard)
         var button2 = this.plugins.get('rexbuttonplugin').add(this.buttonSquare, {
             enable: true,
             mode: 0,            // 0|'press'|1|'release'
@@ -464,13 +469,15 @@ export default class SceneMain extends Phaser.Scene {
             this.gb3x3Colors();
 
             isSame = this.checkArrays(this.innerGBColors, this.solutionColors);
-            
+
+
 
             if (isSame == true)
             {
                 var value = localStorage.getItem('username');
                 if (value == null)
                 {
+
                     var loginDialog = CreateLoginDialog(this, {
                         x: 250,
                         y: 400,
@@ -478,12 +485,22 @@ export default class SceneMain extends Phaser.Scene {
                         username: 'Enter desired username',
                         password: '123',
                     })
-                        .on('login', function (username, password) {
-                            print.text += `${username}:${password}\n`;
-                            loginDialog.destroy();
+                        .on('login', async function (username, password) {
+                            localStorage.setItem('username', `${username}`)
+                            //print.text += `${username}:${password}\n`;
+                            var ifExists = await leaderBoard.getScore(`${username}`)
+                            if (ifExists == undefined)
+                            {
+                                leaderBoard.setUser(`${username}`).post(counter * -1, { moves: `${moveCounter}` });
+                                loginDialog.destroy();
+                            } 
                         })
                         //.drawBounds(this.add.graphics(), 0xff0000)
                         .popUp(500);
+        
+                    var username = 'Username'
+                } else {
+                    this.scene.start('SceneWon')
                 }
                 //this.scene.start('SceneWon')
 
@@ -566,9 +583,7 @@ export default class SceneMain extends Phaser.Scene {
 
 
 }
-const COLOR_PRIMARY = 0xFFFFFF  ;
-const COLOR_LIGHT = 0x7b5e57;
-const COLOR_DARK = 0x260e04;
+
 
 const GetValue = Phaser.Utils.Objects.GetValue;
 var CreateLoginDialog = function (scene, config, onSubmit) {
@@ -582,19 +597,34 @@ var CreateLoginDialog = function (scene, config, onSubmit) {
 
     var background = scene.rexUI.add.roundRectangle(0, 0, 10, 10, 10, COLOR_PRIMARY);
     var titleField = scene.add.text(0, 0, title, {fontSize: '30px', color: '#000000', fontFamily: 'Balsamiq Sans' });
+    var backgroundRectangle = scene.rexUI.add.roundRectangle(0, 0, 10, 10, 10).setStrokeStyle(1, 0xC6CEBC)
+    var takenUsername = scene.add.text(110, 420, 'This username is already in use', {color: '#FF0000', fontFamily: 'Balsamiq Sans'})
+    takenUsername.visible = false;
     var userNameField = scene.rexUI.add.label({
         orientation: 'x',
-        background: scene.rexUI.add.roundRectangle(0, 0, 10, 10, 10).setStrokeStyle(1, 0xC6CEBC),
+        background: backgroundRectangle,
         //icon: scene.add.image(0, 0, 'user'),
         text: scene.rexUI.add.BBCodeText(0, 0, username, { fixedWidth: 250, fixedHeight: 36, valign: 'center', color: '#000000', fontFamily: 'Balsamiq Sans' }),
         space: { top: 5, bottom: 5, left: 15, right: 15, }
     })
         .setInteractive()
         .on('pointerdown', function () {
+            var checkingUsedUsername;
             var config = {
-                onTextChanged: function(textObject, text) {
+                onTextChanged: async function(textObject, text) {
                     username = text;
                     textObject.text = text;
+                    checkingUsedUsername = await leaderBoard.getScore(`${textObject.text}`)
+                    if (checkingUsedUsername != undefined)
+                    {
+                        console.log('Username is taken!')
+                        backgroundRectangle.setStrokeStyle(1, 0xFF0000, 1);
+                        takenUsername.visible = true;
+                    } else {
+                        backgroundRectangle.setStrokeStyle(1, 0xC6CEBC, 1);
+                        takenUsername.visible = false;
+                    }
+                    console.log(textObject.text);
                 }
             }
             scene.rexUI.edit(userNameField.getElement('text'), config);
@@ -608,7 +638,7 @@ var CreateLoginDialog = function (scene, config, onSubmit) {
     })
         .setInteractive()
         .on('pointerdown', function () {
-            //loginDialog.emit('login', username);
+            loginDialog.emit('login', username, password);
             console.log(username)
         });
 
@@ -625,4 +655,23 @@ var CreateLoginDialog = function (scene, config, onSubmit) {
         .add(loginButton, 0, 'center', { bottom: 30, left: 30, right: 30 }, false)
         .layout();
     return loginDialog;
+};
+
+var markPassword = function (password) {
+    return new Array(password.length + 1).join('•');
+};
+
+var config = {
+     type: Phaser.AUTO,
+    parent: 'phaser-example',
+    width: 503,
+    height: 800,
+    scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH,
+    },
+    dom: {
+        createContainer: true
+    },
+    scene: SceneMain
 };
