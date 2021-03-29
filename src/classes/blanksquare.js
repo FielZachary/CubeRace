@@ -8,6 +8,7 @@ export default class BlankGameSquare extends Phaser.GameObjects.Container
         //console.log(this)
         this.randomColor = this.randomColor();
         this.square = this.scene.add.rexRoundRectangle(x, y, 60, 60, 12, squareColor);
+        this.square.alpha = 0
         this.add(this.square);
         this.scene.add.existing(this);
 
