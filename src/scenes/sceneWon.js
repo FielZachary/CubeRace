@@ -26,6 +26,11 @@ export default class SceneWon extends Phaser.Scene {
         this.load.plugin('rexbuttonplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexbuttonplugin.min.js', true);
         this.load.image('QuitButtonNP', 'assets/images/QuitButtonNP.png')
         this.load.image('QuitButtonOP', 'assets/images/QuitButtonOP.png')
+        this.load.scenePlugin({
+            key: 'rexuiplugin',
+            url: 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js',
+            sceneKey: 'rexUI'
+        });   
 
     }
     async create() {

@@ -1,5 +1,6 @@
 // import InputText from 'phaser3-rex-plugins/plugins/inputtext.js';
 // import RexUIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin'
+import { leaderBoard } from "../scenes/SceneStart"
 
 // export default class SceneSignUp extends Phaser.Scene {
 //     constructor() {
@@ -96,15 +97,13 @@ const COLOR_DARK = 0x260e04;
 
 export default class SceneSignUp extends Phaser.Scene {
     constructor() {
-        super({
-            key: 'examples'
-        })
+        super('SceneSignUp')
     }
 
     preload() {
         this.load.image('user', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/assets/images/person.png');
         this.load.image('password', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/assets/images/key.png');
-        this.load.image('SUScreen', 'assets/images/SignUpScreen.png')
+        this.load.image('SUScreen', 'assets/images/NormalBG.png')
         this.load.scenePlugin({
             key: 'rexuiplugin',
             url: 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js',
@@ -116,22 +115,38 @@ export default class SceneSignUp extends Phaser.Scene {
         this.bg = this.add.image(0, 0, 'SUScreen') 
         this.bg.scaleX = 0.47
         this.bg.scaleY = 0.47
-        this.bg.setOrigin(0.152, 0.165)
-        var print = this.add.text(0, 0, '');
+        this.bg.setOrigin(0.135, 0.165)
 
-       var loginDialog = CreateLoginDialog(this, {
+
+
+        localStorage.removeItem('username');
+
+		var userUsername = localStorage.getItem('username')
+        var loginDialog = CreateLoginDialog(this, {
             x: 250,
             y: 400,
             title: 'Sign up to submit your time',
             username: 'Enter desired username',
             password: '123',
         })
-            .on('login', function (username, password) {
-                print.text += `${username}:${password}\n`;
-                loginDialog.destroy();
+            .on('login', async function (username, password) {
+                localStorage.setItem('username', `${username}`)
+                //print.text += `${username}:${password}\n`;
+                var ifExists = await leaderBoard.getScore(`${username}`)
+                if (ifExists == undefined)
+                {
+                    this.scene.start('SceneLeaderboard')
+                    //this.timer.paused = true;
+                   // this.scene.start('SceneWon') 
+                    leaderBoard.setUser(`${username}`).post(counter * -1, { moves: `${moveCounter}` });
+                    loginDialog.destroy();
+
+                       
+                } 
             })
             //.drawBounds(this.add.graphics(), 0xff0000)
             .popUp(500);
+
         var username = 'Username'
 
 
@@ -152,19 +167,34 @@ var CreateLoginDialog = function (scene, config, onSubmit) {
 
     var background = scene.rexUI.add.roundRectangle(0, 0, 10, 10, 10, COLOR_PRIMARY);
     var titleField = scene.add.text(0, 0, title, {fontSize: '30px', color: '#000000', fontFamily: 'Balsamiq Sans' });
+    var backgroundRectangle = scene.rexUI.add.roundRectangle(0, 0, 10, 10, 10).setStrokeStyle(1, 0xC6CEBC)
+    var takenUsername = scene.add.text(110, 420, 'This username is already in use', {color: '#FF0000', fontFamily: 'Balsamiq Sans'})
+    takenUsername.visible = false;
     var userNameField = scene.rexUI.add.label({
         orientation: 'x',
-        background: scene.rexUI.add.roundRectangle(0, 0, 10, 10, 10).setStrokeStyle(1, 0xC6CEBC),
+        background: backgroundRectangle,
         //icon: scene.add.image(0, 0, 'user'),
         text: scene.rexUI.add.BBCodeText(0, 0, username, { fixedWidth: 250, fixedHeight: 36, valign: 'center', color: '#000000', fontFamily: 'Balsamiq Sans' }),
         space: { top: 5, bottom: 5, left: 15, right: 15, }
     })
         .setInteractive()
         .on('pointerdown', function () {
+            var checkingUsedUsername;
             var config = {
-                onTextChanged: function(textObject, text) {
+                onTextChanged: async function(textObject, text) {
                     username = text;
                     textObject.text = text;
+                    checkingUsedUsername = await leaderBoard.getScore(`${textObject.text}`)
+                    if (checkingUsedUsername != undefined)
+                    {
+                        console.log('Username is taken!')
+                        backgroundRectangle.setStrokeStyle(1, 0xFF0000, 1);
+                        takenUsername.visible = true;
+                    } else {
+                        backgroundRectangle.setStrokeStyle(1, 0xC6CEBC, 1);
+                        takenUsername.visible = false;
+                    }
+                    console.log(textObject.text);
                 }
             }
             scene.rexUI.edit(userNameField.getElement('text'), config);
@@ -196,23 +226,3 @@ var CreateLoginDialog = function (scene, config, onSubmit) {
         .layout();
     return loginDialog;
 };
-var markPassword = function (password) {
-    return new Array(password.length + 1).join('•');
-};
-
-var config = {
-    type: Phaser.AUTO,
-    parent: 'phaser-example',
-    width: 503,
-    height: 800,
-    scale: {
-        mode: Phaser.Scale.FIT,
-        autoCenter: Phaser.Scale.CENTER_BOTH,
-    },
-    dom: {
-        createContainer: true
-    },
-    scene: SceneSignUp
-};
-
-//var game = new Phaser.Game(config);

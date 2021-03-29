@@ -30,7 +30,7 @@ if (isMobile == -1) {
         dom: {
             createContainer: true
         },
-        scene: [SceneStart, SceneMain, SceneWon, SceneLeaderboard]
+        scene: [SceneStart, SceneMain, SceneWon, SceneLeaderboard, SceneSignUp]
     };
 } else {
     var config = {
@@ -48,7 +48,7 @@ if (isMobile == -1) {
         dom: {
             createContainer: true
         },
-        scene: [SceneStart, SceneMain, SceneWon, SceneLeaderboard]
+        scene: [SceneStart, SceneMain, SceneWon, SceneLeaderboard, SceneSignUp]
     };
 }
 

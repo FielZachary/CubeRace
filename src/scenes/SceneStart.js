@@ -108,7 +108,7 @@ export default class SceneStart extends Phaser.Scene {
         // this.playButtonOP.scaleX = 0.15
         // this.playButtonOP.scaleY = 0.15
         //this.scene.start('SceneWon')
-        //this.scene.start('SceneLeaderboard')
+        //this.scene.start('SceneSignUp')
         //console.log('end')
 
     }
