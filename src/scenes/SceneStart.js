@@ -1,8 +1,15 @@
 import Phaser from 'phaser';
 export { leaderBoard }
+export { bgMusic }
+
+
+
 var leaderBoard;
+var bgMusic;
 
 if ( calledBack == undefined) {
+    var calledOnce = false;
+} else if (calledBack == true) {
     var calledOnce = false;
 }
 
@@ -108,15 +115,15 @@ export default class SceneStart extends Phaser.Scene {
         // this.playButtonOP.scaleX = 0.15
         // this.playButtonOP.scaleY = 0.15
         //this.scene.start('SceneWon')
-        this.scene.start('SceneSignUp')
+        //this.scene.start('SceneSignUp')
         //console.log('end')
 
     }
     update() {}
     playMusic() {
-        this.bgMusic = this.sound.add('BGMusic')
-        this.bgMusic.play();
-        this.bgMusic.loop = true;
+        bgMusic = this.sound.add('BGMusic')
+        bgMusic.play();
+        bgMusic.loop = true;
     }
 }
 

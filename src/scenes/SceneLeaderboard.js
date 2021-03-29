@@ -84,7 +84,7 @@ export default class SceneLeaderboard extends Phaser.Scene {
 				this.bg.setOrigin(0.135, 0.165)
 
 				this.UserName = this.add.text(80, 600, `You`, { fontFamily: 'Balsamiq Sans', fontSize: '35px', fontStyle: 'bold', color: "#000000" })
-				this.UserTime = this.add.text(300, 595, `time: ${UserScore.score} secs`, { fontFamily: 'Balsamiq Sans', fontSize: '23px', fontStyle: 'bold', color: "#A1A3A6" })
+				this.UserTime = this.add.text(300, 595, `time: ${UserScore.score * -1} secs`, { fontFamily: 'Balsamiq Sans', fontSize: '23px', fontStyle: 'bold', color: "#A1A3A6" })
 				this.UserMoves = this.add.text(300, 620, `moves: ${UserScore.moves}`, { fontFamily: 'Balsamiq Sans', fontSize: '23px', fontStyle: 'bold', color: "#A1A3A6" })
 
 				this.fourthNumText = this.add.text(42.5, 530, `${UserRank.rank + 1}`, { fontFamily: 'Balsamiq Sans', fontSize: '45px', fontStyle: 'bold' })

@@ -2,6 +2,9 @@ import Phaser from 'phaser';
 import { counter } from '../scenes/SceneMain'
 import { moveCounter } from '../scenes/SceneMain'
 import { leaderBoard } from "../scenes/SceneStart"
+import { bgMusic } from "../scenes/SceneStart"
+import { calledBack } from "../scenes/SceneStart"
+export { calledBack }
 // const sceneWonMade;
 // export { sceneWonMade }
 
@@ -26,6 +29,7 @@ export default class SceneWon extends Phaser.Scene {
         this.load.plugin('rexbuttonplugin', 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexbuttonplugin.min.js', true);
         this.load.image('QuitButtonNP', 'assets/images/QuitButtonNP.png')
         this.load.image('QuitButtonOP', 'assets/images/QuitButtonOP.png')
+        this.load.audio('FinishedSFX', 'assets/Sound/FinishedSFX.mp3')
         this.load.scenePlugin({
             key: 'rexuiplugin',
             url: 'https://raw.githubusercontent.com/rexrainbow/phaser3-rex-notes/master/dist/rexuiplugin.min.js',
@@ -34,6 +38,9 @@ export default class SceneWon extends Phaser.Scene {
 
     }
     async create() {
+        bgMusic.stop()
+        this.finishedSFX = this.sound.add('FinishedSFX')
+        this.finishedSFX.play();
         this.playButton = this.add.rexRoundRectangle(130, 700 , 220, 70, 16, 0x6F91C7)
         //this.playAgainText =  this.add.text(120, 700, 'Play', {fontFamily: 'Verdana', fontStyle: 'bold', fontSize: '30px'})
         this.makePlayAgainButton(this.playButton)
@@ -42,18 +49,18 @@ export default class SceneWon extends Phaser.Scene {
          this.makeLeaveButton(this.quitButton)
 
 
-        this.movesNumX = 435;
-        this.timeNumX = 193;
+        this.movesNumX = 395;
+        this.timeNumX = 170;
         this.bg = this.add.image(0, -40, 'wonBG')
         this.bg.scaleX = 0.47
         this.bg.scaleY = 0.47
         this.bg.setOrigin(0, 0)
         console.log('asdpofihsadopifh')
 
-        this.timeNum = this.add.text(this.timeNumX, 575, counter , {fontFamily: 'Verdana', fontStyle: 'bold', fontSize: '30px', color: "#000000"})
+        this.timeNum = this.add.text(this.timeNumX, 570, counter , {fontFamily: 'Verdana', fontStyle: 'bold', fontSize: '30px', color: "#000000"})
 
 
-        this.movesNum = this.add.text(this.movesNumX, 575, moveCounter, {fontFamily: 'Verdana', fontStyle: 'bold', fontSize: '30px', color: "#000000"})
+        this.movesNum = this.add.text(this.movesNumX, 570, moveCounter, {fontFamily: 'Verdana', fontStyle: 'bold', fontSize: '30px', color: "#000000"})
         console.log(counter)
        // console.log(hasSwitched)
        this.quitButtonNP = this.add.image(370, 692, 'QuitButtonNP')
@@ -134,7 +141,7 @@ export default class SceneWon extends Phaser.Scene {
             this.quitButtonNP.visible = true
             this.quitButtonOP.destroy();
             this.scene.start('SceneStart')
-            
+            bgMusic.play();
         }, this);
       }
       makePlayAgainButton(givenButton) {
@@ -159,6 +166,7 @@ export default class SceneWon extends Phaser.Scene {
         button.on('click', function (button, gameObject, pointer, event) {
             this.playButtonOP.destroy();
             this.scene.start('SceneMain')
+            bgMusic.play();
             moveCounter = 0;
             
         }, this);

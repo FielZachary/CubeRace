@@ -9,6 +9,7 @@ console.log('In scene main ' + calledBack)
 //import {sceneWonMade} from '../scenes/sceneWon'
 
 let counter = 0;
+let countdown = 1;
 let moveCounter = 0;
 let hasAdjusted = 0;
 let MhasAdjusted = 0;
@@ -107,16 +108,20 @@ export default class SceneMain extends Phaser.Scene {
 
 
 
-        this.timer = this.time.addEvent({
-            delay: 1000,
-            callback: this.updateCounter,
-            callbackScope: this,
-            loop: true,
 
-        });
 
 
         this.timerNumText = this.add.text(420, 250, counter, {fontFamily: 'Balsamiq Sans', color: "#000000", fontSize: '40px'})
+
+        var gameCountDown = this.time.addEvent({
+            delay: 1000,                // ms
+            callback: this.updateCountDown,
+            //args: [],
+            callbackScope: this,
+            repeat: 2
+        });
+
+        this.countDownText = this.add.text(232, 400, `${countdown}`, {fontFamily: 'Balsamiq Sans', color: "#000000", fontSize: '80px'})
       //  this.scene.start('SceneWon')
 
 
@@ -158,6 +163,33 @@ export default class SceneMain extends Phaser.Scene {
 
 
         }
+
+    }
+    updateCountDown() {
+        countdown++;
+        if(countdown == 4) {
+            this.countDownText.x -= 65
+            this.countDownText.setText('start!')
+            const tween = this.tweens.add({
+                targets: [this.countDownText],
+                alpha: 0,
+                duration: 1250,
+                repeat: 0,
+
+              });
+              this.timer = this.time.addEvent({
+                delay: 1000,
+                callback: this.updateCounter,
+                callbackScope: this,
+                loop: true,
+    
+            });
+        } else {
+            this.countDownText.setText(countdown)
+        }
+
+    }
+    startCounter() {
 
     }
     setSolution()
@@ -444,6 +476,7 @@ export default class SceneMain extends Phaser.Scene {
       }
 
       async makeButton() {
+        //this.scene.start('SceneWon')
         var button2 = this.plugins.get('rexbuttonplugin').add(this.buttonSquare, {
             enable: true,
             mode: 0,            // 0|'press'|1|'release'
