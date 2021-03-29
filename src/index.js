@@ -37,7 +37,7 @@ if (isMobile == -1) {
         type: Phaser.AUTO,
         parent: 'phaser-example',
         scale: {
-            mode: Phaser.Scale.FIT,
+            mode: Phaser.Scale.ENVELOP,
             //autoCenter: Phaser.Scale.CENTER_BOTH,
             _parent: 'phaser-example',
             width: 506,
