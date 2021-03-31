@@ -50,7 +50,7 @@ if (isMobile == -1) {
         dom: {
             createContainer: true
         },
-        scene: [SceneStart, SceneMain, SceneWon, SceneLeaderboard, SceneSignUp, SceneSettings]
+        scene: [SceneStart, SceneMain, SceneWon, SceneLeaderboard, SceneSignUp, SceneSettings, SceneWIP]
     };
 }
 
