@@ -57,10 +57,10 @@ export default class SceneWon extends Phaser.Scene {
         this.bg.setOrigin(0, 0)
         console.log('asdpofihsadopifh')
 
-        this.timeNum = this.add.text(this.timeNumX, 570, counter , {fontFamily: 'Verdana', fontStyle: 'bold', fontSize: '30px', color: "#000000"})
+        this.timeNum = this.add.text(this.timeNumX, 570, counter , {fontFamily: 'Balsamiq Sans', fontStyle: 'bold', fontSize: '30px', color: "#000000"})
 
 
-        this.movesNum = this.add.text(this.movesNumX, 570, moveCounter, {fontFamily: 'Verdana', fontStyle: 'bold', fontSize: '30px', color: "#000000"})
+        this.movesNum = this.add.text(this.movesNumX, 570, moveCounter, {fontFamily: 'Balsamiq Sans', fontStyle: 'bold', fontSize: '30px', color: "#000000"})
         console.log(counter)
        // console.log(hasSwitched)
        this.quitButtonNP = this.add.image(370, 692, 'QuitButtonNP')
@@ -68,8 +68,11 @@ export default class SceneWon extends Phaser.Scene {
        this.quitButtonNP.scaleY = 0.11
 
 
+
        var userUsername = localStorage.getItem('username')
+       var UserRank = await leaderBoard.getRank(`${userUsername}`)
        var UserTopScore = await leaderBoard.getScore(`${userUsername}`)
+
        console.log(userUsername)
     //   console.log(userUsername)
     //   console.log(leaderBoard)
@@ -87,7 +90,9 @@ export default class SceneWon extends Phaser.Scene {
                    localStorage.setItem('username', `${username}`)
                    //print.text += `${username}:${password}\n`;
                    var ifExists = await leaderBoard.getScore(`${username}`)
-                   if (ifExists == undefined)
+                   var ifLong = username.length
+                   console.log(ifLong)
+                   if (ifExists == undefined && ifLong <= 11)
                    {
                        //this.timer.paused = true;
                       // this.scene.start('SceneWon') 
@@ -106,6 +111,8 @@ export default class SceneWon extends Phaser.Scene {
            if (counter < UserTopTime * -1)
            {
                leaderBoard.setUser(`${userUsername}`).post(counter * -1, { moves: `${moveCounter}` });
+               console.log('You have beaten your high score!')
+               this.beatenHSText = this.add.text(50, 620, 'You are now top ' + ( UserRank.rank + 1 ) + ' on the leaderboard!', {fontFamily: 'Balsamiq Sans ', fontSize: '25px',})
            }
            //this.scene.start('SceneWon')
        }
@@ -188,7 +195,9 @@ var CreateLoginDialog = function (scene, config, onSubmit) {
     var titleField = scene.add.text(0, 0, title, {fontSize: '30px', color: '#000000', fontFamily: 'Balsamiq Sans' });
     var backgroundRectangle = scene.rexUI.add.roundRectangle(0, 0, 10, 10, 10).setStrokeStyle(1, 0xC6CEBC)
     var takenUsername = scene.add.text(110, 420, 'This username is already in use', {color: '#FF0000', fontFamily: 'Balsamiq Sans'})
+    var longUsername = scene.add.text(110, 420, 'This username is too long', {color: '#FF0000', fontFamily: 'Balsamiq Sans'})
     takenUsername.visible = false;
+    longUsername.visible = false;
     var userNameField = scene.rexUI.add.label({
         orientation: 'x',
         background: backgroundRectangle,
@@ -209,9 +218,18 @@ var CreateLoginDialog = function (scene, config, onSubmit) {
                         console.log('Username is taken!')
                         backgroundRectangle.setStrokeStyle(1, 0xFF0000, 1);
                         takenUsername.visible = true;
+                        longUsername.visible = false;
                     } else {
                         backgroundRectangle.setStrokeStyle(1, 0xC6CEBC, 1);
                         takenUsername.visible = false;
+                    }
+                    if (textObject.text.length > 11) {
+                        backgroundRectangle.setStrokeStyle(1, 0xFF0000, 1);
+                        longUsername.visible = true
+                        takenUsername.visible = false;
+                    } else {
+                        backgroundRectangle.setStrokeStyle(1, 0xC6CEBC, 1);
+                        longUsername.visible = false;
                     }
                     console.log(textObject.text);
                 }

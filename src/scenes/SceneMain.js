@@ -5,6 +5,7 @@ export { counter };
 export { moveCounter };
 import { leaderBoard } from "../scenes/SceneStart"
 import { calledBack } from "../scenes/SceneStart"
+import { ifSoundOn } from "./SceneSettings"
 console.log('In scene main ' + calledBack)
 //import {sceneWonMade} from '../scenes/sceneWon'
 
@@ -103,6 +104,7 @@ export default class SceneMain extends Phaser.Scene {
         });       
         eButton.on('click', function (button, gameObject, pointer, event) {
           //  calledBack = true;
+            countdown = 1
             this.scene.start('SceneStart')
         }, this);     
 
@@ -272,7 +274,10 @@ export default class SceneMain extends Phaser.Scene {
         this.bGS.switchSquare1( destinationX, destinationY );
         moveCounter++;
         this.movesNum.setText(moveCounter)
-        this.pieceMoveSound.play();
+        if ( ifSoundOn == true ) {
+            this.pieceMoveSound.play();
+        }
+
         if(moveCounter >= 10)
         {
  
@@ -510,7 +515,7 @@ export default class SceneMain extends Phaser.Scene {
 
             if (isSame == true)
             {
-
+                countdown = 1
                 this.scene.start('SceneWon')
 
             }

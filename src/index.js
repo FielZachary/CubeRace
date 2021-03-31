@@ -4,6 +4,8 @@ import SceneMain from "./scenes/SceneMain";
 import SceneWon from './scenes/sceneWon';
 import SceneLeaderboard from './scenes/SceneLeaderboard.js'
 import SceneSignUp from './scenes/SceneSignUp'
+import SceneSettings from './scenes/SceneSettings'
+import SceneWIP from './scenes/SceneWIP'
 import InputTextPlugin from 'phaser3-rex-plugins/plugins/inputtext-plugin.js';
 import RexUIPlugin from 'phaser3-rex-plugins/templates/ui/ui-plugin'
 var calledOnce = false
@@ -30,7 +32,7 @@ if (isMobile == -1) {
         dom: {
             createContainer: true
         },
-        scene: [SceneStart, SceneMain, SceneWon, SceneLeaderboard, SceneSignUp]
+        scene: [SceneStart, SceneMain, SceneWon, SceneLeaderboard, SceneSignUp, SceneSettings, SceneWIP]
     };
 } else {
     var config = {
@@ -48,7 +50,7 @@ if (isMobile == -1) {
         dom: {
             createContainer: true
         },
-        scene: [SceneStart, SceneMain, SceneWon, SceneLeaderboard, SceneSignUp]
+        scene: [SceneStart, SceneMain, SceneWon, SceneLeaderboard, SceneSignUp, SceneSettings]
     };
 }
 

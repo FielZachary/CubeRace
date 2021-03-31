@@ -45,21 +45,11 @@ export default class SceneStart extends Phaser.Scene {
 			// boardID: undefined,
 			// tag: undefined
 		});
-        // leaderBoard.setUser('dummy1').post(101 * -1, { moves: '30' });
-        // leaderBoard.setUser('dummy2').post(102 * -1, { moves: '30' });
-        // leaderBoard.setUser('dummy3').post(103 * -1, { moves: '30' });
-        // leaderBoard.setUser('dummy4').post(104 * -1, { moves: '30' });
-        // leaderBoard.setUser('dummy5').post(105 * -1, { moves: '30' });
-        // leaderBoard.setUser('dummy6').post(106 * -1, { moves: '30' });
 
-
-
-
-
-        //console.log('asdl;')
+        this.settingsSquare = this.add.rectangle(36, 37, 40, 40, 0x000000)
         this.buttonSquare = this.add.rectangle(195, 542.5, 330, 80, 0x000000)
         this.leaderBoardSquare = this.add.rectangle(135, 690, 210, 130, 0x000000)
-
+        this.CFSquare = this.add.rectangle(375, 690, 210, 130, 0x000000)
 
         var button2 = this.plugins.get('rexbuttonplugin').add(this.buttonSquare, {
             enable: true,
@@ -84,7 +74,6 @@ export default class SceneStart extends Phaser.Scene {
             this.scene.start('SceneMain')
         }, this )
         this.buttonSquare.setOrigin(0.5, 0.5)
-    
 
         
         var button3 = this.plugins.get('rexbuttonplugin').add(this.leaderBoardSquare, {
@@ -96,12 +85,32 @@ export default class SceneStart extends Phaser.Scene {
             this.scene.start('SceneLeaderboard')
         }, this )
 
+        var button4 = this.plugins.get('rexbuttonplugin').add(this.CFSquare, {
+            enable: true,
+            mode: 1,            // 0|'press'|1|'release'
+            // clickInterval: 100  // ms
+        });
+        button4.on('click', function (button, gameObject, pointer, event) {
+            this.scene.start('SceneWIP')
+        }, this )
+
+
+        var settingsButton = this.plugins.get('rexbuttonplugin').add(this.settingsSquare, {
+            enable: true,
+            mode: 1,            // 0|'press'|1|'release'
+            // clickInterval: 100  // ms
+        });
+        settingsButton.on('click', function (button, gameObject, pointer, event) {
+            this.scene.start('SceneSettings')
+        }, this )
+
 
         
         this.mainBG = this.add.image(0, 0, 'mainBG')
         this.mainBG.scaleX = 0.47
         this.mainBG.scaleY = 0.47
         this.mainBG.setOrigin(0, 0)
+
 
         if (calledOnce == false)
         {
@@ -115,7 +124,7 @@ export default class SceneStart extends Phaser.Scene {
         // this.playButtonOP.scaleX = 0.15
         // this.playButtonOP.scaleY = 0.15
         //this.scene.start('SceneWon')
-        //this.scene.start('SceneSignUp')
+        //this.scene.start('SceneWIP')
         //console.log('end')
 
     }
