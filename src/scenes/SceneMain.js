@@ -61,6 +61,7 @@ export default class SceneMain extends Phaser.Scene {
         this.doneButton.scaleX = 0.1
         this.doneButton.scaleY = 0.1
         this.incorrectSound = this.sound.add('incorrect')
+        //this.helpButton = this.add.rectangle()
 
 
         this.purpleOutline = this.add.rexRoundRectangle(254, 210, 207, 207, 16, 0x6a0dad);

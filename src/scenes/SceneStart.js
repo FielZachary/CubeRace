@@ -50,6 +50,8 @@ export default class SceneStart extends Phaser.Scene {
         this.buttonSquare = this.add.rectangle(195, 542.5, 330, 80, 0x000000)
         this.leaderBoardSquare = this.add.rectangle(135, 690, 210, 130, 0x000000)
         this.CFSquare = this.add.rectangle(375, 690, 210, 130, 0x000000)
+        this.helpSquare = this.add.rectangle(435, 540, 80, 80, 0x000000 )
+
 
         var button2 = this.plugins.get('rexbuttonplugin').add(this.buttonSquare, {
             enable: true,
@@ -104,6 +106,15 @@ export default class SceneStart extends Phaser.Scene {
             this.scene.start('SceneSettings')
         }, this )
 
+        var helpButton = this.plugins.get('rexbuttonplugin').add(this.helpSquare, {
+            enable: true,
+            mode: 1,            // 0|'press'|1|'release'
+            // clickInterval: 100  // ms
+        });
+        helpButton.on('click', function (button, gameObject, pointer, event) {
+            this.scene.start('SceneHelp')
+        }, this )
+
 
         
         this.mainBG = this.add.image(0, 0, 'mainBG')
@@ -112,12 +123,15 @@ export default class SceneStart extends Phaser.Scene {
         this.mainBG.setOrigin(0, 0)
 
 
+
+
         if (calledOnce == false)
         {
             console.log('playing music')
             this.playMusic();
             calledOnce = true;
         }
+        
 
         //console.log(this.mainBG);
         // this.playButtonOP = this.add.image(198, 550, 'PlayButtonOP')
