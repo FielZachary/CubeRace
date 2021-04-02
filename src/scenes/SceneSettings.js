@@ -1,4 +1,5 @@
 import { bgMusic } from './SceneStart'
+import { analytics } from './SceneStart'
 
 
 let ifMusicOn = true;
@@ -82,10 +83,12 @@ export default class SceneSettings extends Phaser.Scene {
                 this.SoundOn.visible = false;
                 this.SoundOff.visible = true;
                 ifSoundOn = false;
+                analytics.logEvent('Turning SFX off')
             } else if (ifSoundOn == false) {
                 this.SoundOn.visible = true;
                 this.SoundOff.visible = false;
                 ifSoundOn = true
+                analytics.logEvent('Turning SFX on')
             }
        }, this);    
 
@@ -102,11 +105,13 @@ export default class SceneSettings extends Phaser.Scene {
         this.MusicOff.visible = true;
         ifMusicOn = false;
         bgMusic.stop();
+        analytics.logEvent('Turning music off')
     } else if (ifMusicOn == false) {
         this.MusicOn.visible = true;
         this.MusicOff.visible = false;
         ifMusicOn = true
         bgMusic.play();
+        analytics.logEvent('Turning music on')
     }
      }, this);     
 

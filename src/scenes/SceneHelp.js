@@ -1,4 +1,4 @@
-
+import { analytics } from './SceneStart'
 
 export default class SceneHelp extends Phaser.Scene {
     constructor() {
@@ -74,6 +74,7 @@ export default class SceneHelp extends Phaser.Scene {
                 //console.log(this.onPage)
             }
             this.whichPage();
+            analytics.logEvent('Using tutorial screen')
         }, this);
 
         this.whichPage();

@@ -4,6 +4,7 @@ import { moveCounter } from '../scenes/SceneMain'
 import { leaderBoard } from "../scenes/SceneStart"
 import { bgMusic } from "../scenes/SceneStart"
 import { calledBack } from "../scenes/SceneStart"
+import { analytics } from "../scenes/SceneStart"
 export { calledBack }
 // const sceneWonMade;
 // export { sceneWonMade }
@@ -148,6 +149,7 @@ export default class SceneWon extends Phaser.Scene {
             this.quitButtonNP.visible = true
             this.quitButtonOP.destroy();
             this.scene.start('SceneStart')
+            analytics.logEvent('Quitting_main_game')
             bgMusic.play();
         }, this);
       }
@@ -173,6 +175,7 @@ export default class SceneWon extends Phaser.Scene {
         button.on('click', function (button, gameObject, pointer, event) {
             this.playButtonOP.destroy();
             this.scene.start('SceneMain')
+            analytics.logEvent('Playing_another_game')
             bgMusic.play();
             moveCounter = 0;
             
@@ -198,6 +201,7 @@ var CreateLoginDialog = function (scene, config, onSubmit) {
     var longUsername = scene.add.text(110, 420, 'This username is too long', {color: '#FF0000', fontFamily: 'Balsamiq Sans'})
     takenUsername.visible = false;
     longUsername.visible = false;
+
     var userNameField = scene.rexUI.add.label({
         orientation: 'x',
         background: backgroundRectangle,

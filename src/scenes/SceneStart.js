@@ -89,7 +89,7 @@ export default class SceneStart extends Phaser.Scene {
             this.playButtonOP.destroy();
             console.log('button pressed')
             this.scene.start('SceneMain')
-            analytics.logEvent('Play_new_game')
+            analytics.logEvent('Playing_new_game')
         }, this )
         this.buttonSquare.setOrigin(0.5, 0.5)
 
@@ -111,6 +111,7 @@ export default class SceneStart extends Phaser.Scene {
         });
         button4.on('click', function (button, gameObject, pointer, event) {
             this.scene.start('SceneWIP')
+            analytics.logEvent('Clicked_Multiplayer')
         }, this )
 
 

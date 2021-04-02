@@ -6,6 +6,7 @@ export { moveCounter };
 import { leaderBoard } from "../scenes/SceneStart"
 import { calledBack } from "../scenes/SceneStart"
 import { ifSoundOn } from "./SceneSettings"
+import { analytics } from "../scenes/SceneStart"
 console.log('In scene main ' + calledBack)
 //import {sceneWonMade} from '../scenes/sceneWon'
 
@@ -107,6 +108,7 @@ export default class SceneMain extends Phaser.Scene {
           //  calledBack = true;
             countdown = 1
             this.scene.start('SceneStart')
+            analytics.logEvent('Left_main_game')
         }, this);     
 
 
@@ -518,7 +520,7 @@ export default class SceneMain extends Phaser.Scene {
             {
                 countdown = 1
                 this.scene.start('SceneWon')
-
+                analytics.logEvent('Finished_a_puzzle')
             }
             if (isSame == false)
             {
