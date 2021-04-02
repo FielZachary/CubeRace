@@ -1,11 +1,26 @@
 import Phaser from 'phaser';
 export { leaderBoard }
 export { bgMusic }
+export { analytics }
 
 
+firebase.initializeApp({
+    apiKey: "AIzaSyAIR8i2ia1-fNmDSFYLWX28TXgmjfE4GLY",
+    authDomain: "cuberace-5d31c.firebaseapp.com",
+    databaseURL: "https://cuberace-5d31c-default-rtdb.firebaseio.com",
+    projectId: "cuberace-5d31c",
+    storageBucket: "cuberace-5d31c.appspot.com",
+    messagingSenderId: "942525608410",
+    appId: "1:942525608410:web:82b444e42e9c16562990e3",
+    measurementId: "G-8EBYQP6CGV"
+})
 
 var leaderBoard;
 var bgMusic;
+const analytics = firebase.analytics();
+
+//console.log(analytics)
+
 
 if ( calledBack == undefined) {
     var calledOnce = false;
@@ -74,6 +89,7 @@ export default class SceneStart extends Phaser.Scene {
             this.playButtonOP.destroy();
             console.log('button pressed')
             this.scene.start('SceneMain')
+            analytics.logEvent('Play_new_game')
         }, this )
         this.buttonSquare.setOrigin(0.5, 0.5)
 
@@ -85,6 +101,7 @@ export default class SceneStart extends Phaser.Scene {
         });
         button3.on('click', function (button, gameObject, pointer, event) {
             this.scene.start('SceneLeaderboard')
+            analytics.logEvent('Going_to_leaderboard')
         }, this )
 
         var button4 = this.plugins.get('rexbuttonplugin').add(this.CFSquare, {
@@ -104,6 +121,7 @@ export default class SceneStart extends Phaser.Scene {
         });
         settingsButton.on('click', function (button, gameObject, pointer, event) {
             this.scene.start('SceneSettings')
+            analytics.logEvent('Going_to_settings')
         }, this )
 
         var helpButton = this.plugins.get('rexbuttonplugin').add(this.helpSquare, {
@@ -113,6 +131,7 @@ export default class SceneStart extends Phaser.Scene {
         });
         helpButton.on('click', function (button, gameObject, pointer, event) {
             this.scene.start('SceneHelp')
+            analytics.logEvent('Going_to_tutorial')
         }, this )
 
 

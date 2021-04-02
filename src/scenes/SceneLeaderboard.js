@@ -12,14 +12,9 @@ const COLOR_DARK = 0x260e04;
 
 var hasAccount = true;
 
-firebase.initializeApp({
-	apiKey: "AIzaSyAIR8i2ia1-fNmDSFYLWX28TXgmjfE4GLY",
-	authDomain: 'cuberace-5d31c.firebaseapp.com',
-	databaseURL: 'https://cuberace-5d31c-default-rtdb.firebaseio.com/',
-	projectId: 'cuberace-5d31c',
-	storageBucket: 'gs://cuberace-5d31c.appspot.com/',
-	messagingSenderId: '942525608410',
-})
+
+
+
 
 // Initialize Firebase
 // firebase.initializeApp(firebaseConfig)
