@@ -1,15 +1,15 @@
 WebFontConfig = {
-google: { families: ['Balsamiq Sans'] }
+  google: { families: ["Balsamiq Sans"] },
 };
-(function() {
-var wf = document.createElement('script');
-wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
-'://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
-wf.type = 'text/javascript';
-wf.async = 'true';
-var s = document.getElementsByTagName('script')[0];
-s.parentNode.insertBefore(wf, s);
+(function () {
+  var wf = document.createElement("script");
+  wf.src =
+    ("https:" == document.location.protocol ? "https" : "http") +
+    "://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js";
+  wf.type = "text/javascript";
+  wf.async = "true";
+  var s = document.getElementsByTagName("script")[0];
+  s.parentNode.insertBefore(wf, s);
 })();
 
-
-// "Fresca","Flamenco","Indie Flower",'Anton', 'Montserrat', 'Verdana', 'Oxygen', 'Black Han Sans', 'Bubblegum Sans', 
+// "Fresca","Flamenco","Indie Flower",'Anton', 'Montserrat', 'Verdana', 'Oxygen', 'Black Han Sans', 'Bubblegum Sans',

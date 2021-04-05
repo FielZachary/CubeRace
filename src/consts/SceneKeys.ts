@@ -1,9 +1,8 @@
-enum SceneKeys
-{
-	Preloader = 'preloader',
-	Game = 'game',
-	GameOver = 'game-over',
-	Leaderboard = 'leaderboard'
+enum SceneKeys {
+  Preloader = "preloader",
+  Game = "game",
+  GameOver = "game-over",
+  Leaderboard = "leaderboard",
 }
 
-export default SceneKeys
+export default SceneKeys;
