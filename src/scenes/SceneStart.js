@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import firebase from "firebase/app";
 
 firebase.initializeApp({
   apiKey: "AIzaSyAIR8i2ia1-fNmDSFYLWX28TXgmjfE4GLY",
@@ -14,7 +15,7 @@ firebase.initializeApp({
 let leaderBoard;
 let bgMusic;
 const analytics = firebase.analytics();
-const calledBack = false;
+let calledBack;
 let calledOnce;
 
 if (calledBack === undefined) {
@@ -76,7 +77,7 @@ export default class SceneStart extends Phaser.Scene {
     });
     button2.on(
       "click",
-      function () {
+      function onClick() {
         this.playButtonOP = this.add.image(198, 550, "PlayButtonOP");
         this.playButtonOP.scaleX = 0.1515;
         this.playButtonOP.scaleY = 0.15;
@@ -91,7 +92,7 @@ export default class SceneStart extends Phaser.Scene {
     });
     button.on(
       "click",
-      function () {
+      function onClick() {
         this.playButtonOP.destroy();
 
         this.scene.start("SceneMain");
@@ -110,7 +111,7 @@ export default class SceneStart extends Phaser.Scene {
       });
     button3.on(
       "click",
-      function () {
+      function onClick() {
         this.scene.start("SceneLeaderboard");
         analytics.logEvent("Going_to_leaderboard");
       },
@@ -124,7 +125,7 @@ export default class SceneStart extends Phaser.Scene {
     });
     button4.on(
       "click",
-      function () {
+      function onClick() {
         this.scene.start("SceneWIP");
         analytics.logEvent("Clicked_Multiplayer");
       },
@@ -140,7 +141,7 @@ export default class SceneStart extends Phaser.Scene {
       });
     settingsButton.on(
       "click",
-      function () {
+      function onClick() {
         this.scene.start("SceneSettings");
         analytics.logEvent("Going_to_settings");
       },
@@ -156,7 +157,7 @@ export default class SceneStart extends Phaser.Scene {
       });
     helpButton.on(
       "click",
-      function () {
+      function onClick() {
         this.scene.start("SceneHelp");
         analytics.logEvent("Going_to_tutorial");
       },
@@ -169,7 +170,6 @@ export default class SceneStart extends Phaser.Scene {
     this.mainBG.setOrigin(0, 0);
 
     if (calledOnce === false) {
-      console.log("playing music");
       this.playMusic();
       calledOnce = true;
     }
@@ -178,12 +178,10 @@ export default class SceneStart extends Phaser.Scene {
     // this.playButtonOP = this.add.image(198, 550, 'PlayButtonOP')
     // this.playButtonOP.scaleX = 0.15
     // this.playButtonOP.scaleY = 0.15
-    // this.scene.start('SceneWon')
+    this.scene.start("SceneWon");
     // this.scene.start('SceneWIP')
     // console.log('end')
   }
-
-  update() {}
 
   playMusic() {
     bgMusic = this.sound.add("BGMusic");

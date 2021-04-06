@@ -1,3 +1,4 @@
+import Phaser from "phaser";
 import { analytics } from "./SceneStart";
 
 export default class SceneHelp extends Phaser.Scene {
@@ -44,7 +45,7 @@ export default class SceneHelp extends Phaser.Scene {
     });
     eButton.on(
       "click",
-      function () {
+      function onClick() {
         //  calledBack = true;
         // countdown = 1
         this.scene.start("SceneStart");
@@ -61,7 +62,7 @@ export default class SceneHelp extends Phaser.Scene {
       });
     previousButton.on(
       "click",
-      function () {
+      function onClick() {
         //  calledBack = true;
         // countdown = 1
         if (this.onPage > 1) {
@@ -80,7 +81,7 @@ export default class SceneHelp extends Phaser.Scene {
     });
     nextButton.on(
       "click",
-      function () {
+      function onClick() {
         //  calledBack = true;
         // countdown = 1
         if (this.onPage < 3) {

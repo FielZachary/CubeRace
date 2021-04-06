@@ -88,7 +88,7 @@ export default class SceneSettings extends Phaser.Scene {
       });
     SoundButton.on(
       "click",
-      function () {
+      function onClick() {
         //  calledBack = true;
         if (ifSoundOn === true) {
           this.SoundOn.visible = false;
@@ -114,7 +114,7 @@ export default class SceneSettings extends Phaser.Scene {
       });
     MusicButton.on(
       "click",
-      function () {
+      function onClick() {
         //  calledBack = true;
         if (ifMusicOn === true) {
           this.MusicOn.visible = false;
@@ -140,7 +140,7 @@ export default class SceneSettings extends Phaser.Scene {
     });
     eButton.on(
       "click",
-      function () {
+      function onClick() {
         //  calledBack = true;
         // countdown = 1
         this.scene.start("SceneStart");

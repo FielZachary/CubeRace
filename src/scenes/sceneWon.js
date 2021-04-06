@@ -8,7 +8,146 @@ export { calledBack };
 // export { sceneWonMade }
 
 const COLOR_PRIMARY = 0xffffff;
-let loginDialog;
+
+const { GetValue } = Phaser.Utils.Objects;
+const CreateLoginDialog = function createLoginDialog(scene, config) {
+  let username = GetValue(config, "username", "Username");
+  const password = GetValue(config, "password", "");
+  const title = GetValue(config, "title", "Welcome");
+  const x = GetValue(config, "x", 0);
+  const y = GetValue(config, "y", 0);
+  const width = GetValue(config, "width", undefined);
+  const height = GetValue(config, "height", undefined);
+
+  const background = scene.rexUI.add.roundRectangle(
+    0,
+    0,
+    10,
+    10,
+    10,
+    COLOR_PRIMARY
+  );
+  const titleField = scene.add.text(0, 0, title, {
+    fontSize: "30px",
+    color: "#000000",
+    fontFamily: "Balsamiq Sans",
+  });
+  const backgroundRectangle = scene.rexUI.add
+    .roundRectangle(0, 0, 10, 10, 10)
+    .setStrokeStyle(1, 0xc6cebc);
+  const takenUsername = scene.add.text(
+    110,
+    420,
+    "This username is already in use",
+    { color: "#FF0000", fontFamily: "Balsamiq Sans" }
+  );
+  const longUsername = scene.add.text(110, 420, "This username is too long", {
+    color: "#FF0000",
+    fontFamily: "Balsamiq Sans",
+  });
+  takenUsername.visible = false;
+  longUsername.visible = false;
+
+  const userNameField = scene.rexUI.add
+    .label({
+      orientation: "x",
+      background: backgroundRectangle,
+      // icon: scene.add.image(0, 0, 'user'),
+      text: scene.rexUI.add.BBCodeText(0, 0, username, {
+        fixedWidth: 250,
+        fixedHeight: 36,
+        valign: "center",
+        color: "#000000",
+        fontFamily: "Balsamiq Sans",
+      }),
+      space: {
+        top: 5,
+        bottom: 5,
+        left: 15,
+        right: 15,
+      },
+    })
+    .setInteractive()
+    .on("pointerdown", () => {
+      let checkingUsedUsername;
+      const userNameConfig = {
+        async onTextChanged(textObject, text) {
+          // let textObjText;
+          // textObjText = textObject.text
+          username = text;
+          textObject.text = text;
+          checkingUsedUsername = await leaderBoard.getScore(
+            `${textObject.text}`
+          );
+          if (checkingUsedUsername !== undefined) {
+            backgroundRectangle.setStrokeStyle(1, 0xff0000, 1);
+            takenUsername.visible = true;
+            longUsername.visible = false;
+          } else {
+            backgroundRectangle.setStrokeStyle(1, 0xc6cebc, 1);
+            takenUsername.visible = false;
+          }
+          if (textObject.text.length > 11) {
+            backgroundRectangle.setStrokeStyle(1, 0xff0000, 1);
+            longUsername.visible = true;
+            takenUsername.visible = false;
+          } else {
+            backgroundRectangle.setStrokeStyle(1, 0xc6cebc, 1);
+            longUsername.visible = false;
+          }
+        },
+      };
+      scene.rexUI.edit(userNameField.getElement("text"), userNameConfig);
+    });
+
+  const loginButton = scene.rexUI.add
+    .label({
+      orientation: "x",
+      background: scene.rexUI.add.roundRectangle(0, 0, 20, 15, 10, 0xc6cebc),
+      text: scene.add.text(0, 0, "Sign Up", {
+        fontFamily: "Balsamiq Sans",
+        fontSize: "23px",
+        fontStyle: "bold",
+      }),
+      space: {
+        top: 8,
+        bottom: 8,
+        left: 16,
+        right: 16,
+      },
+    })
+    .setInteractive()
+    .on("pointerdown", () => {
+      loginDialog.emit("login", username, password);
+    });
+
+  const loginDialog = scene.rexUI.add
+    .sizer({
+      orientation: "y",
+      x,
+      y,
+      width,
+      height,
+    })
+    .addBackground(background)
+    .add(
+      titleField,
+      0,
+      "center",
+      {
+        top: 30,
+        bottom: 30,
+        left: 30,
+        right: 30,
+      },
+      false
+    )
+    .add(userNameField, 0, "left", { bottom: 40, left: 75, right: 75 }, true)
+    .add(loginButton, 0, "center", { bottom: 30, left: 30, right: 30 }, false)
+    .layout();
+
+  return loginDialog;
+};
 
 export default class SceneWon extends Phaser.Scene {
   constructor() {
@@ -98,19 +237,19 @@ export default class SceneWon extends Phaser.Scene {
     //   console.log(leaderBoard)
     const value = localStorage.getItem("username");
     if (value == null) {
-      loginDialog = CreateLoginDialog(this, {
+      const loginDialog = CreateLoginDialog(this, {
         x: 250,
         y: 400,
         title: "Sign up to submit your time",
         username: "Enter desired username",
         password: "123",
       })
-        .on("login", async (username, password) => {
+        .on("login", async (username) => {
           localStorage.setItem("username", `${username}`);
           // print.text += `${username}:${password}\n`;
           const ifExists = await leaderBoard.getScore(`${username}`);
           const ifLong = username.length;
-          console.log(ifLong);
+
           if (ifExists === undefined && ifLong <= 11) {
             // this.timer.paused = true;
             // this.scene.start('SceneWon')
@@ -148,7 +287,7 @@ export default class SceneWon extends Phaser.Scene {
     });
     button2.on(
       "click",
-      function () {
+      function onClick() {
         this.quitButtonNP.visible = false;
         this.quitButtonOP = this.add.image(370, 692, "QuitButtonOP");
         this.quitButtonOP.scaleX = 0.114;
@@ -164,7 +303,7 @@ export default class SceneWon extends Phaser.Scene {
     });
     button.on(
       "click",
-      function () {
+      function onClick() {
         this.quitButtonNP.visible = true;
         this.quitButtonOP.destroy();
         this.scene.start("SceneStart");
@@ -183,7 +322,7 @@ export default class SceneWon extends Phaser.Scene {
     });
     button2.on(
       "click",
-      function () {
+      function onClick() {
         this.playButtonOP = this.add.image(55, 782, "NextButtonOP");
         this.playButtonOP.scaleX = 0.114;
         this.playButtonOP.scaleY = 0.11;
@@ -198,7 +337,7 @@ export default class SceneWon extends Phaser.Scene {
     });
     button.on(
       "click",
-      function () {
+      function onClick() {
         this.playButtonOP.destroy();
         this.scene.start("SceneMain");
         analytics.logEvent("Playing_another_game");
@@ -209,143 +348,3 @@ export default class SceneWon extends Phaser.Scene {
     );
   }
 }
-
-const { GetValue } = Phaser.Utils.Objects;
-var CreateLoginDialog = function (scene, config, onSubmit) {
-  let username = GetValue(config, "username", "Username");
-  const password = GetValue(config, "password", "");
-  const title = GetValue(config, "title", "Welcome");
-  const x = GetValue(config, "x", 0);
-  const y = GetValue(config, "y", 0);
-  const width = GetValue(config, "width", undefined);
-  const height = GetValue(config, "height", undefined);
-
-  const background = scene.rexUI.add.roundRectangle(
-    0,
-    0,
-    10,
-    10,
-    10,
-    COLOR_PRIMARY
-  );
-  const titleField = scene.add.text(0, 0, title, {
-    fontSize: "30px",
-    color: "#000000",
-    fontFamily: "Balsamiq Sans",
-  });
-  const backgroundRectangle = scene.rexUI.add
-    .roundRectangle(0, 0, 10, 10, 10)
-    .setStrokeStyle(1, 0xc6cebc);
-  const takenUsername = scene.add.text(
-    110,
-    420,
-    "This username is already in use",
-    { color: "#FF0000", fontFamily: "Balsamiq Sans" }
-  );
-  const longUsername = scene.add.text(110, 420, "This username is too long", {
-    color: "#FF0000",
-    fontFamily: "Balsamiq Sans",
-  });
-  takenUsername.visible = false;
-  longUsername.visible = false;
-
-  var userNameField = scene.rexUI.add
-    .label({
-      orientation: "x",
-      background: backgroundRectangle,
-      // icon: scene.add.image(0, 0, 'user'),
-      text: scene.rexUI.add.BBCodeText(0, 0, username, {
-        fixedWidth: 250,
-        fixedHeight: 36,
-        valign: "center",
-        color: "#000000",
-        fontFamily: "Balsamiq Sans",
-      }),
-      space: {
-        top: 5,
-        bottom: 5,
-        left: 15,
-        right: 15,
-      },
-    })
-    .setInteractive()
-    .on("pointerdown", () => {
-      let checkingUsedUsername;
-      const config = {
-        async onTextChanged(textObject, text) {
-          username = text;
-          textObject.text = text;
-          checkingUsedUsername = await leaderBoard.getScore(
-            `${textObject.text}`
-          );
-          if (checkingUsedUsername != undefined) {
-            console.log("Username is taken!");
-            backgroundRectangle.setStrokeStyle(1, 0xff0000, 1);
-            takenUsername.visible = true;
-            longUsername.visible = false;
-          } else {
-            backgroundRectangle.setStrokeStyle(1, 0xc6cebc, 1);
-            takenUsername.visible = false;
-          }
-          if (textObject.text.length > 11) {
-            backgroundRectangle.setStrokeStyle(1, 0xff0000, 1);
-            longUsername.visible = true;
-            takenUsername.visible = false;
-          } else {
-            backgroundRectangle.setStrokeStyle(1, 0xc6cebc, 1);
-            longUsername.visible = false;
-          }
-          console.log(textObject.text);
-        },
-      };
-      scene.rexUI.edit(userNameField.getElement("text"), config);
-    });
-
-  const loginButton = scene.rexUI.add
-    .label({
-      orientation: "x",
-      background: scene.rexUI.add.roundRectangle(0, 0, 20, 15, 10, 0xc6cebc),
-      text: scene.add.text(0, 0, "Sign Up", {
-        fontFamily: "Balsamiq Sans",
-        fontSize: "23px",
-        fontStyle: "bold",
-      }),
-      space: {
-        top: 8,
-        bottom: 8,
-        left: 16,
-        right: 16,
-      },
-    })
-    .setInteractive()
-    .on("pointerdown", () => {
-      loginDialog.emit("login", username, password);
-      console.log(username);
-    });
-
-  var loginDialog = scene.rexUI.add
-    .sizer({
-      orientation: "y",
-      x,
-      y,
-      width,
-      height,
-    })
-    .addBackground(background)
-    .add(
-      titleField,
-      0,
-      "center",
-      {
-        top: 30,
-        bottom: 30,
-        left: 30,
-        right: 30,
-      },
-      false
-    )
-    .add(userNameField, 0, "left", { bottom: 40, left: 75, right: 75 }, true)
-    .add(loginButton, 0, "center", { bottom: 30, left: 30, right: 30 }, false)
-    .layout();
-  return loginDialog;
-};

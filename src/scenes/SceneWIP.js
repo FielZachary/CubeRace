@@ -24,7 +24,7 @@ export default class SceneWIP extends Phaser.Scene {
     });
     eButton.on(
       "click",
-      function () {
+      function onClick() {
         //  calledBack = true;
         // countdown = 1
         this.scene.start("SceneStart");
@@ -32,6 +32,4 @@ export default class SceneWIP extends Phaser.Scene {
       this
     );
   }
-
-  update() {}
 }

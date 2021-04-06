@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import GameSquare from "../classes/gamesquare";
 import BlankGameSquare from "../classes/blanksquare";
-import { leaderBoard, calledBack, analytics } from "./SceneStart";
+import { analytics } from "./SceneStart";
 
 import { ifSoundOn } from "./SceneSettings";
 
@@ -10,7 +10,6 @@ let countdown = 1;
 let moveCounter = 0;
 let hasAdjusted = 0;
 let MhasAdjusted = 0;
-const COLOR_PRIMARY = 0xffffff;
 
 export { counter };
 export { moveCounter };
@@ -54,7 +53,6 @@ export default class SceneMain extends Phaser.Scene {
     counter = 0;
 
     this.pieceMoveSound = this.sound.add("MovePiece");
-    this.loadFont("MixolydianTitlingRg-Bold", "assets/fonts/mixolydian.ttf");
     this.bg = this.add.image(-10, 140, "screenBG");
     this.bg.scaleX = 0.5;
     this.bg.scaleY = 0.5;
@@ -191,7 +189,7 @@ export default class SceneMain extends Phaser.Scene {
       });
     eButton.on(
       "click",
-      function () {
+      function onClick() {
         //  calledBack = true;
         countdown = 1;
         this.scene.start("SceneStart");
@@ -206,7 +204,7 @@ export default class SceneMain extends Phaser.Scene {
       fontSize: "40px",
     });
 
-    const gameCountDown = this.time.addEvent({
+    this.time.addEvent({
       delay: 1000, // ms
       callback: this.updateCountDown,
       // args: [],
@@ -244,7 +242,7 @@ export default class SceneMain extends Phaser.Scene {
     if (countdown === 4) {
       this.countDownText.x -= 65;
       this.countDownText.setText("start!");
-      const tween = this.tweens.add({
+      this.tweens.add({
         targets: [this.countDownText],
         alpha: 0,
         duration: 1250,
@@ -285,7 +283,7 @@ export default class SceneMain extends Phaser.Scene {
 
   setGameBoard() {
     this.bGS = new BlankGameSquare({ scene: this }, 394, 670, 0x000000);
-    this.shuffledArray = this.shuffle(this.colorArray);
+    this.shuffle(this.colorArray);
     for (let i = 0; i <= 23; i += 1) {
       const colorNumber = this.determineColor(this.shuffledArray[i]);
       this.gsGameBoard[i] = new GameSquare(
@@ -309,39 +307,41 @@ export default class SceneMain extends Phaser.Scene {
   }
 
   shuffle(array) {
-    for (let i = array.length - 1; i > 0; i -= 1) {
+    const newArray = array;
+    for (let i = newArray.length - 1; i > 0; i -= 1) {
       const j = Math.floor(Math.random() * (i + 1));
-      const temp = array[i];
-      array[i] = array[j];
-      array[j] = temp;
+      const temp = newArray[i];
+      newArray[i] = newArray[j];
+      newArray[j] = temp;
     }
-    return array;
+    this.shuffledArray = newArray;
+    return newArray;
   }
 
   determineColor(shuffledArray) {
     if (shuffledArray === 0) {
-      var squareColor = 0x000000;
+      this.squareColor = 0x000000;
     }
     if (shuffledArray === 1) {
-      var squareColor = 0x847777;
+      this.squareColor = 0x847777;
     }
     if (shuffledArray === 2) {
-      var squareColor = 0xcbccd1;
+      this.squareColor = 0xcbccd1;
     }
     if (shuffledArray === 3) {
-      var squareColor = 0xff0000;
+      this.squareColor = 0xff0000;
     }
     if (shuffledArray === 4) {
-      var squareColor = 0xffa500;
+      this.squareColor = 0xffa500;
     }
     if (shuffledArray === 5) {
-      var squareColor = 0x6f91c7;
+      this.squareColor = 0x6f91c7;
     }
     if (shuffledArray === 6) {
-      var squareColor = 0x228b22;
+      this.squareColor = 0x228b22;
     }
 
-    return squareColor;
+    return this.squareColor;
   }
 
   switchZone(destinationX, destinationY) {
@@ -403,11 +403,14 @@ export default class SceneMain extends Phaser.Scene {
     }
     for (let i = 0; i <= 7; i += 1) {
       if (array1[i] !== array2[i]) {
-        array12 = this.findOtherPossibilities(array2, 1);
+        this.findOtherPossibilities(array2);
+        array12 = this.otherPossibility1;
         if (array1[i] !== array12[i]) {
-          array13 = this.findOtherPossibilities(array12, 2);
+          this.findOtherPossibilities(array12);
+          array13 = this.otherPossibility2;
           if (array1[i] !== array13[i]) {
-            array14 = this.findOtherPossibilities(array13, 3);
+            this.findOtherPossibilities(array13);
+            array14 = this.otherPossibility3;
             if (array1[i] !== array14[i]) {
               return false;
             }
@@ -428,7 +431,7 @@ export default class SceneMain extends Phaser.Scene {
         // console.log(this.gsGameBoard[b].square.x + ' ' + checkX)
         if (this.gsGameBoard[b].square.x === this.checkX) {
           //  console.log(this.gsGameBoard[b].square.y + ' ' + checkY)
-          if (this.gsGameBoard[b].square.y === checkY) {
+          if (this.gsGameBoard[b].square.y === this.checkY) {
             // console.log('im in')
             this.innerGBColors.push(this.gsGameBoard[b].squareColor);
           }
@@ -439,7 +442,7 @@ export default class SceneMain extends Phaser.Scene {
       }
       if (this.checkX > 324) {
         this.checkX = 184;
-        checkY += 70;
+        this.checkY += 70;
       }
     }
   }
@@ -447,90 +450,80 @@ export default class SceneMain extends Phaser.Scene {
   checking3x3Colors() {
     for (let b = 0; b <= 23; b += 1) {
       //  console.log('im in')
-      if (this.gsGameBoard[b].square.x == this.checkX) {
+      if (this.gsGameBoard[b].square.x === this.checkX) {
         this.innerGBColors.unshift(this.gsGameBoard[b]);
         if (this.checkX <= 330) {
           this.checkX += 70;
         }
         if (this.checkX > 330) {
           this.checkX = 190;
-          checkY += 70;
+          this.checkY += 70;
         }
       }
     }
   }
 
   checkAllowed(givenObject) {
-    var finalAllowedCoords = [];
-    var finalAllowedCoords = this.checkAllowedCoords(
+    this.finalAllowedCoords = this.checkAllowedCoords(
       this.bGS.square.x,
       this.bGS.square.y
     );
     for (let i = 0; i <= 3; i += 1) {
-      if (givenObject.x === finalAllowedCoords[i][0]) {
-        if (givenObject.y === finalAllowedCoords[i][1]) {
+      if (givenObject.x === this.finalAllowedCoords[i][0]) {
+        if (givenObject.y === this.finalAllowedCoords[i][1]) {
           return true;
         }
       }
     }
+    return false;
   }
 
   checkAllowedCoords(givenX, givenY) {
-    let finalAllowedCoords = [];
-    finalAllowedCoords = [
+    this.finalAllowedCoords = [];
+    this.finalAllowedCoords = [
       [givenX, givenY + 70],
       [givenX, givenY - 70],
       [givenX + 70, givenY],
       [givenX - 70, givenY],
     ];
-    return finalAllowedCoords;
+    return this.finalAllowedCoords;
   }
 
-  findOtherPossibilities(givenArray, whichPos) {
-    const otherPossibility1 = [];
-    const otherPossibility2 = [];
-    const otherPossibility3 = [];
-    otherPossibility1.push(givenArray[6]);
-    otherPossibility1.push(givenArray[3]);
-    otherPossibility1.push(givenArray[0]);
-    otherPossibility1.push(givenArray[7]);
-    otherPossibility1.push(givenArray[4]);
-    otherPossibility1.push(givenArray[1]);
-    otherPossibility1.push(givenArray[8]);
-    otherPossibility1.push(givenArray[5]);
-    otherPossibility1.push(givenArray[2]);
+  findOtherPossibilities(givenArray) {
+    this.otherPossibility1 = [];
+    this.otherPossibility2 = [];
+    this.otherPossibility3 = [];
+    this.otherPossibility1.push(givenArray[6]);
+    this.otherPossibility1.push(givenArray[3]);
+    this.otherPossibility1.push(givenArray[0]);
+    this.otherPossibility1.push(givenArray[7]);
+    this.otherPossibility1.push(givenArray[4]);
+    this.otherPossibility1.push(givenArray[1]);
+    this.otherPossibility1.push(givenArray[8]);
+    this.otherPossibility1.push(givenArray[5]);
+    this.otherPossibility1.push(givenArray[2]);
 
-    otherPossibility2.push(otherPossibility1[6]);
-    otherPossibility2.push(otherPossibility1[3]);
-    otherPossibility2.push(otherPossibility1[0]);
-    otherPossibility2.push(otherPossibility1[7]);
-    otherPossibility2.push(otherPossibility1[4]);
-    otherPossibility2.push(otherPossibility1[1]);
-    otherPossibility2.push(otherPossibility1[8]);
-    otherPossibility2.push(otherPossibility1[5]);
-    otherPossibility2.push(otherPossibility1[2]);
+    this.otherPossibility2.push(this.otherPossibility1[6]);
+    this.otherPossibility2.push(this.otherPossibility1[3]);
+    this.otherPossibility2.push(this.otherPossibility1[0]);
+    this.otherPossibility2.push(this.otherPossibility1[7]);
+    this.otherPossibility2.push(this.otherPossibility1[4]);
+    this.otherPossibility2.push(this.otherPossibility1[1]);
+    this.otherPossibility2.push(this.otherPossibility1[8]);
+    this.otherPossibility2.push(this.otherPossibility1[5]);
+    this.otherPossibility2.push(this.otherPossibility1[2]);
 
-    otherPossibility3.push(otherPossibility2[6]);
-    otherPossibility3.push(otherPossibility2[3]);
-    otherPossibility3.push(otherPossibility2[0]);
-    otherPossibility3.push(otherPossibility2[7]);
-    otherPossibility3.push(otherPossibility2[4]);
-    otherPossibility3.push(otherPossibility2[1]);
-    otherPossibility3.push(otherPossibility2[8]);
-    otherPossibility3.push(otherPossibility2[5]);
-    otherPossibility3.push(otherPossibility2[2]);
+    this.otherPossibility3.push(this.otherPossibility2[6]);
+    this.otherPossibility3.push(this.otherPossibility2[3]);
+    this.otherPossibility3.push(this.otherPossibility2[0]);
+    this.otherPossibility3.push(this.otherPossibility2[7]);
+    this.otherPossibility3.push(this.otherPossibility2[4]);
+    this.otherPossibility3.push(this.otherPossibility2[1]);
+    this.otherPossibility3.push(this.otherPossibility2[8]);
+    this.otherPossibility3.push(this.otherPossibility2[5]);
+    this.otherPossibility3.push(this.otherPossibility2[2]);
 
-    if (whichPos === 1) {
-      return otherPossibility1;
-    }
-
-    if (whichPos === 2) {
-      return otherPossibility2;
-    }
-
-    if (whichPos === 3) {
-      return otherPossibility3;
-    }
+    return this.otherPossibility1;
   }
 
   async makeButton() {
@@ -542,7 +535,7 @@ export default class SceneMain extends Phaser.Scene {
     });
     button2.on(
       "click",
-      function () {
+      function onClick() {
         this.doneButton.visible = false;
         this.doneButtonClosed = this.add.image(254, 750, "doneButtonOP");
         this.doneButtonClosed.scaleX = 0.1;
@@ -556,7 +549,7 @@ export default class SceneMain extends Phaser.Scene {
     });
     button.on(
       "click",
-      function () {
+      function onClick() {
         this.doneButton.visible = true;
         this.doneButtonClosed.destroy();
 
@@ -587,13 +580,13 @@ export default class SceneMain extends Phaser.Scene {
               fontSize: "30px",
             });
             this.penaltyText.alpha = 0;
-            const tween = this.tweens.add({
+            this.tweens.add({
               targets: [this.penaltyText],
               alpha: 1,
               duration: 1000,
               repeat: 0,
             });
-            const tween2 = this.tweens.add({
+            this.tweens.add({
               targets: [this.penaltyText],
               scaleX: 1.5,
               scaleY: 1.5,
@@ -609,7 +602,7 @@ export default class SceneMain extends Phaser.Scene {
   }
 
   wrongAnimation() {
-    const setOrig = this.time.addEvent({
+    this.time.addEvent({
       delay: 500,
       callback: this.setButtonBlue,
       callbackScope: this,
@@ -623,7 +616,7 @@ export default class SceneMain extends Phaser.Scene {
 
   setButtonBlue() {
     this.buttonSquare.setFillStyle(0x6f91c7);
-    const resetFade = this.time.addEvent({
+    this.time.addEvent({
       delay: 500,
       callback: this.fadeOutText,
       callbackScope: this,
@@ -633,7 +626,7 @@ export default class SceneMain extends Phaser.Scene {
 
   fadeOutText() {
     // console.log('hi')
-    const tween3 = this.tweens.add({
+    this.tweens.add({
       targets: [this.penaltyText],
       alpha: 0,
       duration: 1000,
@@ -642,147 +635,3 @@ export default class SceneMain extends Phaser.Scene {
     this.finishedFade = true;
   }
 }
-
-const { GetValue } = Phaser.Utils.Objects;
-const CreateLoginDialog = function (scene, config, onSubmit) {
-  let username = GetValue(config, "username", "Username");
-  const password = GetValue(config, "password", "");
-  const title = GetValue(config, "title", "Welcome");
-  const x = GetValue(config, "x", 0);
-  const y = GetValue(config, "y", 0);
-  const width = GetValue(config, "width", undefined);
-  const height = GetValue(config, "height", undefined);
-
-  const background = scene.rexUI.add.roundRectangle(
-    0,
-    0,
-    10,
-    10,
-    10,
-    COLOR_PRIMARY
-  );
-  const titleField = scene.add.text(0, 0, title, {
-    fontSize: "30px",
-    color: "#000000",
-    fontFamily: "Balsamiq Sans",
-  });
-  const backgroundRectangle = scene.rexUI.add
-    .roundRectangle(0, 0, 10, 10, 10)
-    .setStrokeStyle(1, 0xc6cebc);
-  const takenUsername = scene.add.text(
-    110,
-    420,
-    "This username is already in use",
-    { color: "#FF0000", fontFamily: "Balsamiq Sans" }
-  );
-  takenUsername.visible = false;
-  var userNameField = scene.rexUI.add
-    .label({
-      orientation: "x",
-      background: backgroundRectangle,
-      // icon: scene.add.image(0, 0, 'user'),
-      text: scene.rexUI.add.BBCodeText(0, 0, username, {
-        fixedWidth: 250,
-        fixedHeight: 36,
-        valign: "center",
-        color: "#000000",
-        fontFamily: "Balsamiq Sans",
-      }),
-      space: {
-        top: 5,
-        bottom: 5,
-        left: 15,
-        right: 15,
-      },
-    })
-    .setInteractive()
-    .on("pointerdown", () => {
-      let checkingUsedUsername;
-      const config = {
-        async onTextChanged(textObject, text) {
-          username = text;
-          textObject.text = text;
-          checkingUsedUsername = await leaderBoard.getScore(
-            `${textObject.text}`
-          );
-          if (checkingUsedUsername != undefined) {
-            console.log("Username is taken!");
-            backgroundRectangle.setStrokeStyle(1, 0xff0000, 1);
-            takenUsername.visible = true;
-          } else {
-            backgroundRectangle.setStrokeStyle(1, 0xc6cebc, 1);
-            takenUsername.visible = false;
-          }
-          console.log(textObject.text);
-        },
-      };
-      scene.rexUI.edit(userNameField.getElement("text"), config);
-    });
-
-  const loginButton = scene.rexUI.add
-    .label({
-      orientation: "x",
-      background: scene.rexUI.add.roundRectangle(0, 0, 20, 15, 10, 0xc6cebc),
-      text: scene.add.text(0, 0, "Sign Up", {
-        fontFamily: "Balsamiq Sans",
-        fontSize: "23px",
-        fontStyle: "bold",
-      }),
-      space: {
-        top: 8,
-        bottom: 8,
-        left: 16,
-        right: 16,
-      },
-    })
-    .setInteractive()
-    .on("pointerdown", () => {
-      loginDialog.emit("login", username, password);
-      console.log(username);
-    });
-
-  var loginDialog = scene.rexUI.add
-    .sizer({
-      orientation: "y",
-      x,
-      y,
-      width,
-      height,
-    })
-    .addBackground(background)
-    .add(
-      titleField,
-      0,
-      "center",
-      {
-        top: 30,
-        bottom: 30,
-        left: 30,
-        right: 30,
-      },
-      false
-    )
-    .add(userNameField, 0, "left", { bottom: 40, left: 75, right: 75 }, true)
-    .add(loginButton, 0, "center", { bottom: 30, left: 30, right: 30 }, false)
-    .layout();
-  return loginDialog;
-};
-
-const markPassword = function (password) {
-  return new Array(password.length + 1).join("•");
-};
-
-const config = {
-  type: Phaser.AUTO,
-  parent: "phaser-example",
-  width: 503,
-  height: 800,
-  scale: {
-    mode: Phaser.Scale.FIT,
-    autoCenter: Phaser.Scale.CENTER_BOTH,
-  },
-  dom: {
-    createContainer: true,
-  },
-  scene: SceneMain,
-};

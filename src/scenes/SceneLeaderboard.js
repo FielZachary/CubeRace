@@ -2,9 +2,8 @@ import Phaser from "phaser";
 import "regenerator-runtime";
 import { leaderBoard } from "./SceneStart";
 
-const COLOR_PRIMARY = 0xffffff;
-
 let hasAccount = true;
+const UserUsername = localStorage.getItem("username");
 
 // Initialize Firebase
 // firebase.initializeApp(firebaseConfig)
@@ -37,6 +36,7 @@ export default class SceneLeaderboard extends Phaser.Scene {
   }
 
   async create() {
+    let UserRank;
     this.exitSquare = this.add.rectangle(40, 30, 40, 40, 0x2d2d2d);
     // localStorage.removeItem('username');
 
@@ -48,11 +48,9 @@ export default class SceneLeaderboard extends Phaser.Scene {
       this.bg.scaleY = 0.47;
       this.bg.setOrigin(0.135, 0.165);
     } else {
-      const UserUsername = localStorage.getItem("username");
+      UserRank = await leaderBoard.getRank(`${UserUsername}`); // Remember to plus one since its ranking based off an array
 
-      var UserRank = await leaderBoard.getRank(`${UserUsername}`); // Remember to plus one since its ranking based off an array
-
-      var UserScore = await leaderBoard.getScore(`${UserUsername}`);
+      const UserScore = await leaderBoard.getScore(`${UserUsername}`);
       if (UserRank.rank <= 2) {
         this.bg = this.add.image(0, 0, "LBBGTop3");
         this.bg.scaleX = 0.47;
@@ -103,13 +101,11 @@ export default class SceneLeaderboard extends Phaser.Scene {
     const topThreeUser = topUsers[2];
 
     if (hasAccount === true) {
-      const UserUsername = localStorage.getItem("username");
+      // const UserUsername = localStorage.getItem("username");
       // console.log(UserUsername)
-
-      var UserRank = await leaderBoard.getRank(`${UserUsername}`); // Remember to plus one since its ranking based off an array
+      // var UserRank = await leaderBoard.getRank(`${UserUsername}`); // Remember to plus one since its ranking based off an array
       // console.log(UserRank)
-
-      var UserScore = await leaderBoard.getScore(`${UserUsername}`);
+      // var UserScore = await leaderBoard.getScore(`${UserUsername}`);
     }
 
     // console.log(UserScore)
@@ -141,7 +137,7 @@ export default class SceneLeaderboard extends Phaser.Scene {
     });
     button2.on(
       "click",
-      function () {
+      function onClick() {
         this.scene.start("SceneStart");
       },
       this
@@ -245,110 +241,3 @@ export default class SceneLeaderboard extends Phaser.Scene {
     // this.fourthNumText.text = `${UserRank.rank + 1}`
   }
 }
-
-const { GetValue } = Phaser.Utils.Objects;
-const CreateLoginDialog = function (scene, config) {
-  let username = GetValue(config, "username", "Username");
-  const password = GetValue(config, "password", "");
-  const title = GetValue(config, "title", "Welcome");
-  const x = GetValue(config, "x", 0);
-  const y = GetValue(config, "y", 0);
-  const width = GetValue(config, "width", undefined);
-  const height = GetValue(config, "height", undefined);
-
-  const background = scene.rexUI.add.roundRectangle(
-    0,
-    0,
-    10,
-    10,
-    10,
-    COLOR_PRIMARY
-  );
-  const titleField = scene.add.text(0, 0, title, {
-    fontSize: "30px",
-    color: "#000000",
-    fontFamily: "Balsamiq Sans",
-  });
-  var userNameField = scene.rexUI.add
-    .label({
-      orientation: "x",
-      background: scene.rexUI.add
-        .roundRectangle(0, 0, 10, 10, 10)
-        .setStrokeStyle(1, 0xc6cebc),
-      // icon: scene.add.image(0, 0, 'user'),
-      text: scene.rexUI.add.BBCodeText(0, 0, username, {
-        fixedWidth: 250,
-        fixedHeight: 36,
-        valign: "center",
-        color: "#000000",
-        fontFamily: "Balsamiq Sans",
-      }),
-      space: {
-        top: 5,
-        bottom: 5,
-        left: 15,
-        right: 15,
-      },
-    })
-    .setInteractive()
-    .on("pointerdown", () => {
-      const config = {
-        onTextChanged(textObject, text) {
-          username = text;
-          textObject.text = text;
-        },
-      };
-      scene.rexUI.edit(userNameField.getElement("text"), config);
-    });
-
-  const loginButton = scene.rexUI.add
-    .label({
-      orientation: "x",
-      background: scene.rexUI.add.roundRectangle(0, 0, 20, 15, 10, 0xc6cebc),
-      text: scene.add.text(0, 0, "Sign Up", {
-        fontFamily: "Balsamiq Sans",
-        fontSize: "23px",
-        fontStyle: "bold",
-      }),
-      space: {
-        top: 8,
-        bottom: 8,
-        left: 16,
-        right: 16,
-      },
-    })
-    .setInteractive()
-    .on("pointerdown", () => {
-      loginDialog.emit("login", username, password);
-      console.log(username);
-    });
-
-  var loginDialog = scene.rexUI.add
-    .sizer({
-      orientation: "y",
-      x,
-      y,
-      width,
-      height,
-    })
-    .addBackground(background)
-    .add(
-      titleField,
-      0,
-      "center",
-      {
-        top: 30,
-        bottom: 30,
-        left: 30,
-        right: 30,
-      },
-      false
-    )
-    .add(userNameField, 0, "left", { bottom: 40, left: 75, right: 75 }, true)
-    .add(loginButton, 0, "center", { bottom: 30, left: 30, right: 30 }, false)
-    .layout();
-  return loginDialog;
-};
-const markPassword = function (password) {
-  return new Array(password.length + 1).join("•");
-};
