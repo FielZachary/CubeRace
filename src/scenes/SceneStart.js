@@ -1,5 +1,6 @@
 import Phaser from "phaser";
-import firebase from "firebase/app";
+
+//import firebase from "firebase/app";
 
 firebase.initializeApp({
   apiKey: "AIzaSyAIR8i2ia1-fNmDSFYLWX28TXgmjfE4GLY",
@@ -178,7 +179,7 @@ export default class SceneStart extends Phaser.Scene {
     // this.playButtonOP = this.add.image(198, 550, 'PlayButtonOP')
     // this.playButtonOP.scaleX = 0.15
     // this.playButtonOP.scaleY = 0.15
-    this.scene.start("SceneWon");
+    //this.scene.start("SceneWon");
     // this.scene.start('SceneWIP')
     // console.log('end')
   }
